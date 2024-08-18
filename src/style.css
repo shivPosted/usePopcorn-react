@@ -110,6 +110,8 @@ main > section {
   color: #f7f7f7cf;
   position: relative;
   min-height: 30rem;
+  max-height: 50rem;
+  overflow: auto;
 }
 
 li {
