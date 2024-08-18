@@ -51,20 +51,22 @@ const tempWatchedData = [
 const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
 function App() {
+  const [movies, setMovies] = useState(tempMovieData);
+  const searchLength = movies ? movies.length : 0;
   return (
     <>
-      <NavBar />
-      <Main />
+      <NavBar searchLength={searchLength} />
+      <Main movies={movies} />
     </>
   );
 }
 
-function NavBar() {
+function NavBar({ searchLength }) {
   return (
     <nav className="flex">
       <Logo />
       <SearchBox />
-      <NumResult />
+      <NumResult searchLength={searchLength} />
     </nav>
   );
 }
@@ -94,17 +96,16 @@ function SearchBox() {
   );
 }
 
-function NumResult() {
+function NumResult({ searchLength }) {
   return (
     <h2 className="result-summary">
-      Found <strong>X</strong> results
+      Found <strong>{searchLength}</strong> results
     </h2>
   );
 }
 
-function MovieListBox() {
+function MovieListBox({ movies }) {
   const [isOpen1, setIsOpen1] = useState(false);
-  const [movies, setMovies] = useState(tempMovieData);
   return (
     <section className="result-display-section">
       <button
@@ -213,10 +214,10 @@ function WatchedMovie({ movie }) {
 
 // console.log(avgImdbRating, avgUserRating);
 
-function Main() {
+function Main({ movies }) {
   return (
     <main className="grid">
-      <MovieListBox />
+      <MovieListBox movies={movies} />
       <WatchedMovieBox />
     </main>
   );
