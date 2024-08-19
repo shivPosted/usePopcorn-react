@@ -2,18 +2,31 @@ import { useState } from 'react';
 
 const styleContainer = {
   display: 'flex',
-  gap: '32px',
+  gap: '16px',
   alignItems: 'center',
+  backgroundColor: '#2A3335',
+  padding: '16px 12px',
+  maxWidth: '20%',
+  borderRadius: '9px',
+  color: '#fff',
+  justifyContent: 'center',
 };
 
 const styleStarContainer = {
   display: 'flex',
-  gap: '5px',
+  gap: '3px',
 };
 
 const styleRatingNum = {
   lineHeight: '1',
   margin: '0',
+  display: 'flex',
+  alignItems: 'center',
+  // justifyContent: 'center',
+  textAlign: 'center',
+  fontWeight: '700',
+  fontSize: '20px',
+  fontFamily: 'sans-serif',
 };
 
 const styleStar = {
@@ -24,41 +37,54 @@ const styleStar = {
 
 export default function StarComponent({ maxLength = 5 }) {
   const [starCount, setStarCount] = useState(0);
+  const [tempStarCount, setTempStarCount] = useState(0);
 
   return (
     <div className="container" style={styleContainer}>
-      <div className="star-container" style={styleStarContainer}>
+      <div
+        className="star-container"
+        style={styleStarContainer}
+        onMouseLeave={() => setTempStarCount(0)}
+      >
         {Array.from({ length: maxLength }, (_, i) => {
-          return starCount > i && starCount !== 0 ? (
-            <StarFilled
+          return (
+            <Star
+              full={tempStarCount ? tempStarCount >= i + 1 : starCount >= i + 1}
+              key={i + 1}
+              handleMouseEnter={() => {
+                setTempStarCount(i + 1);
+              }}
+              // handleMouseLeave={() => setTempStarCount(0)}
               handleClick={() =>
                 setStarCount(cur => (cur === i + 1 ? 0 : i + 1))
               }
-              key={i}
-            />
-          ) : (
-            <StarEmpty
-              handleClick={() =>
-                setStarCount(cur => (cur === i + 1 ? 0 : i + 1))
-              }
-              key={i}
             />
           );
         })}
       </div>
-      <p className="ratings" style={styleRatingNum}>
-        {starCount || ''}
+      <p
+        className="ratings"
+        style={{
+          ...styleRatingNum,
+          opacity: starCount || tempStarCount ? '100%' : '0',
+          width: '16px',
+          height: '16px',
+        }}
+      >
+        {tempStarCount || starCount}
       </p>
     </div>
   );
 }
 
-function StarEmpty({ handleClick }) {
+function Star({ handleClick, full, handleMouseEnter }) {
   return (
     <svg
       onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      // onMouseLeave={handleMouseLeave}
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
+      fill={full ? '#FFD700' : 'none'}
       viewBox="0 0 24 24"
       stroke="#FFD700"
       style={styleStar}
@@ -73,25 +99,6 @@ function StarEmpty({ handleClick }) {
   );
 }
 
-function StarFilled({ handleClick }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="#FFD700"
-      viewBox="0 0 24 24"
-      stroke="#FFD700"
-      onClick={handleClick}
-      style={styleStar}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="{2}"
-        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-      />
-    </svg>
-  );
-}
 /*
 FULL STAR
 
