@@ -52,20 +52,27 @@ const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
 async function fetchMovies(query, setState, setLoading) {
   setLoading(true);
+  try {
+    const res = await fetch(
+      `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`
+    );
 
-  const res = await fetch(
-    `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`
-  );
-  const data = await res.json();
-  console.log(data);
-  setLoading(false);
-  setState(data.Search);
+    const data = await res.json();
+    console.log(data);
+    setLoading(false);
+    setState(data.Search);
+  } catch {
+    setLoading(false);
+
+    console.error('Network lost');
+  }
 }
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const searchLength = movies ? movies.length : 0;
   const search = 'interstellar';
@@ -82,7 +89,17 @@ function App() {
         <NumResult searchLength={searchLength} />
       </NavBar>
       <Main>
-        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
+        <Box>
+          {!error ? (
+            isLoading ? (
+              <Loader />
+            ) : (
+              <MovieList movies={movies} />
+            )
+          ) : (
+            <DisplayError message={error} />
+          )}
+        </Box>
         <Box>
           <UserSummary watched={watched} />
           <WatchedMovieList movies={watched} />
@@ -94,6 +111,14 @@ function App() {
 
 function Loader() {
   return <p className="loader">Loading...</p>;
+}
+
+function DisplayError({ message }) {
+  return (
+    <p className="error">
+      🚨<span>{message}</span>
+    </p>
+  );
 }
 
 function NavBar({ children }) {
@@ -154,7 +179,6 @@ function Box({ children }) {
 }
 
 function MovieList({ movies }) {
-  if (movies.length === 0) return <p>Loading...</p>;
   return (
     <ul>
       {movies?.map(movie => (
