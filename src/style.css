@@ -159,3 +159,10 @@ li h4 {
   font-size: 1.6rem;
   gap: 1.6rem;
 }
+
+.loader {
+  margin: 3.2rem auto;
+  text-align: center;
+  font-size: 3.2rem;
+  font-weight: 600;
+}

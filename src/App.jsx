@@ -50,23 +50,28 @@ const tempWatchedData = [
 
 const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
-async function fetchMovies(query, setState) {
+async function fetchMovies(query, setState, setLoading) {
+  setLoading(true);
+
   const res = await fetch(
     `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`
   );
   const data = await res.json();
   console.log(data);
+  setLoading(false);
   setState(data.Search);
 }
 
 function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setIsLoading] = useState(false);
+
   const searchLength = movies ? movies.length : 0;
   const search = 'interstellar';
 
   useEffect(() => {
-    fetchMovies(search, setMovies);
+    fetchMovies(search, setMovies, setIsLoading);
   }, []);
 
   return (
@@ -77,9 +82,7 @@ function App() {
         <NumResult searchLength={searchLength} />
       </NavBar>
       <Main>
-        <Box>
-          <MovieList movies={movies} />
-        </Box>
+        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
         <Box>
           <UserSummary watched={watched} />
           <WatchedMovieList movies={watched} />
@@ -87,6 +90,10 @@ function App() {
       </Main>
     </>
   );
+}
+
+function Loader() {
+  return <p className="loader">Loading...</p>;
 }
 
 function NavBar({ children }) {
@@ -131,7 +138,7 @@ function Main({ children }) {
 }
 
 function Box({ children }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <section className="result-display-section">
       <button
@@ -147,6 +154,7 @@ function Box({ children }) {
 }
 
 function MovieList({ movies }) {
+  if (movies.length === 0) return <p>Loading...</p>;
   return (
     <ul>
       {movies?.map(movie => (
@@ -185,9 +193,9 @@ function MovieList({ movies }) {
 // }
 
 function UserSummary({ watched }) {
-  const avgImdbRating = average(watched.map(movie => movie.imdbRating));
-  const avgUserRating = average(watched.map(movie => movie.userRating));
-  const avgRunTime = average(watched.map(movie => movie.runtime));
+  const avgImdbRating = average(watched?.map(movie => movie.imdbRating));
+  const avgUserRating = average(watched?.map(movie => movie.userRating));
+  const avgRunTime = average(watched?.map(movie => movie.runtime));
   return (
     <div className="user-movies-overview flex">
       <h3>Movies You Watched</h3>
