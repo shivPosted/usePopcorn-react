@@ -110,7 +110,7 @@ main > section {
   color: #f7f7f7cf;
   position: relative;
   min-height: 30rem;
-  max-height: 50rem;
+  max-height: 60rem;
   overflow: auto;
 }
 
@@ -160,7 +160,8 @@ li h4 {
   gap: 1.6rem;
 }
 
-.loader {
+.loader,
+.error {
   margin: 3.2rem auto;
   text-align: center;
   font-size: 3.2rem;

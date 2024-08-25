@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './style.css';
 import { API_key } from './Util';
+import { jsx } from 'react/jsx-runtime';
 const tempMovieData = [
   {
     imdbID: 'tt1375666',
@@ -50,21 +51,25 @@ const tempWatchedData = [
 
 const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
-async function fetchMovies(query, setState, setLoading) {
+async function fetchMovies(query, setState, setLoading, setError) {
   setLoading(true);
+  setError('');
   try {
     const res = await fetch(
       `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`
     );
+    if (!res.ok) throw new Error(`Failed: ${res.status + res.statusText}`);
 
     const data = await res.json();
-    console.log(data);
-    setLoading(false);
+    if (data.Response === 'False') throw new Error(data.Error);
     setState(data.Search);
-  } catch {
+    console.log(data);
+  } catch (err) {
+    setError(err.message);
+    console.error(err.message);
+  } finally {
+    // setError('Try Searching');
     setLoading(false);
-
-    console.error('Network lost');
   }
 }
 
@@ -73,19 +78,24 @@ function App() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const [query, setQuery] = useState('avengers');
   const searchLength = movies ? movies.length : 0;
-  const search = 'interstellar';
+  // const search = 'interstellar';
 
   useEffect(() => {
-    fetchMovies(search, setMovies, setIsLoading);
-  }, []);
+    if (query.length < 3) {
+      setError('');
+      setMovies([]);
+      return;
+    }
+    fetchMovies(query, setMovies, setIsLoading, setError);
+  }, [query]);
 
   return (
     <>
       <NavBar>
         <Logo />
-        <SearchBox />
+        <SearchBox setQuery={setQuery} query={query} />
         <NumResult searchLength={searchLength} />
       </NavBar>
       <Main>
@@ -134,15 +144,15 @@ function Logo() {
   );
 }
 
-function SearchBox() {
-  const [search, setSearch] = useState('');
+function SearchBox({ setQuery, query }) {
+  // const [search, setSearch] = useState('');
   return (
     <input
       type="text"
       placeholder="Search movies..."
-      value={search}
+      value={query}
       onChange={e => {
-        setSearch(e.target.value);
+        setQuery(e.target.value);
 
         console.log(e.target.value);
       }}
