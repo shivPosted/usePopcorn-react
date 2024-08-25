@@ -110,7 +110,7 @@ main > section {
   color: #f7f7f7cf;
   position: relative;
   min-height: 30rem;
-  max-height: 60rem;
+  max-height: 65rem;
   overflow: auto;
 }
 
@@ -121,6 +121,12 @@ li {
   grid-template-columns: 2fr 8fr;
   padding: 1.6rem 2.4rem;
   border-bottom: 2px solid #77777722;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+li:hover {
+  background-color: #343a40;
 }
 
 .img-container {
@@ -166,4 +172,75 @@ li h4 {
   text-align: center;
   font-size: 3.2rem;
   font-weight: 600;
+}
+
+/*selected movie section*/
+
+.selected-movie {
+  display: flex;
+  flex-direction: column;
+  gap: 4.8rem;
+  position: relative;
+}
+
+.movie-overview {
+  display: flex;
+  gap: 3.2rem;
+  background-color: #343a40;
+}
+
+.movie-overview-image {
+  width: 50%;
+}
+
+.movie-overview-image img {
+  height: 100%;
+  width: 100%;
+}
+
+.movie-overview-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  margin-block: 3.2rem;
+  margin-right: 1.6rem;
+  /* padding: 3.2rem; */
+}
+
+.movie-overview-details h2 {
+  font-size: 2.4rem;
+  line-height: 1.2;
+  /* font-weight: 600; */
+}
+
+.movie-overview-details p {
+  font-size: 1.4rem;
+  /* font-weight: 600; */
+}
+
+.selected-movie > section:nth-child(2) {
+  max-width: 80%;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  font-size: 1.4rem;
+}
+
+.rate-movie {
+  /* width: 80%; */
+  background-color: #343a40;
+  padding: 2.4rem;
+  border-radius: 8px;
+}
+
+.back-btn {
+  left: 2%;
+  background-color: #fff;
+  color: #000;
+  /* display: flex; */
+  /* padding: 1rem; */
+  /* width: 4.8rem;
+  height: 4.8rem; */
+  font-size: 2.8rem;
 }

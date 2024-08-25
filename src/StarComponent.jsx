@@ -84,6 +84,7 @@ export default function StarComponent({
           opacity: starCount || tempStarCount ? '100%' : '0',
           width: '16px',
           height: '16px',
+          color: color,
         }}
       >
         {ratingString.length === 0
