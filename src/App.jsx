@@ -50,17 +50,23 @@ const tempWatchedData = [
 
 const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
+async function fetchMovies(query, setState) {
+  const res = await fetch(
+    `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`
+  );
+  const data = await res.json();
+  console.log(data);
+  setState(data.Search);
+}
+
 function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
   const searchLength = movies ? movies.length : 0;
+  const search = 'interstellar';
 
   useEffect(() => {
-    fetch(
-      `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=interstellar`
-    )
-      .then(res => res.json())
-      .then(data => setMovies(data.Search));
+    fetchMovies(search, setMovies);
   }, []);
 
   return (
