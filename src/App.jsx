@@ -50,7 +50,8 @@ const tempWatchedData = [
   },
 ];
 
-const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
+const average = arr =>
+  Number(arr.reduce((accum, cur) => accum + cur) / arr.length).toFixed(1);
 
 async function fetchMovies(query, setState, setLoading, setError) {
   setLoading(true);
@@ -76,7 +77,7 @@ async function fetchMovies(query, setState, setLoading, setError) {
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('avengers');
@@ -116,6 +117,14 @@ function App() {
     fetchMovies(query, setMovies, setIsLoading, setError);
   }, [query]);
 
+  function handleAddToWathedList(passedMovie) {
+    setWatched(cur => {
+      console.log(typeof cur);
+      if (cur.find(movie => movie.imdbID === selectedId)) return cur;
+      return [...cur, passedMovie];
+    });
+    setSelectedId(null);
+  }
   return (
     <>
       <NavBar>
@@ -139,7 +148,8 @@ function App() {
           {selectedId ? (
             <SelectedMovie
               selectedId={selectedId}
-              // setSelectedMovie={setSelectedMovie}
+              setSelectedId={setSelectedId}
+              handleAddToWathedList={handleAddToWathedList}
             />
           ) : (
             <>
@@ -266,9 +276,14 @@ function MovieList({ movies, setSelectedId }) {
 // }
 
 function UserSummary({ watched }) {
-  const avgImdbRating = average(watched?.map(movie => movie.imdbRating));
-  const avgUserRating = average(watched?.map(movie => movie.userRating));
-  const avgRunTime = average(watched?.map(movie => movie.runtime));
+  let avgImdbRating = 0;
+  let avgUserRating = 0;
+  let avgRunTime = 0;
+  if (!(watched.length === 0)) {
+    avgImdbRating = average(watched?.map(movie => movie.imdbRating));
+    avgUserRating = average(watched?.map(movie => movie.userRating));
+    avgRunTime = average(watched?.map(movie => movie.runtime));
+  }
   return (
     <div className="user-movies-overview flex">
       <h3>Movies You Watched</h3>
@@ -296,9 +311,9 @@ function WatchedMovieList({ movies }) {
       {movies?.map(movie => (
         <li key={movie.imdbID}>
           <div className="img-container">
-            <img src={movie.Poster} alt={`${movie.Title} Poster`} />
+            <img src={movie.poster} alt={`${movie.title} Poster`} />
           </div>
-          <h3>{movie.Title}</h3>
+          <h3>{movie.title}</h3>
           <div className="user-reviewed-list-stats flex">
             <div className="imdb-ratings">
               ⭐ <span>{movie.imdbRating}</span>
@@ -307,7 +322,7 @@ function WatchedMovieList({ movies }) {
               🌟 <span>{movie.userRating}</span>
             </div>
             <div className="movie-length">
-              ⌛ <span>{movie.runtime}</span> min
+              ⌛ <span>{movie.runtime}</span>
             </div>
           </div>
         </li>
@@ -316,13 +331,11 @@ function WatchedMovieList({ movies }) {
   );
 }
 
-function SelectedMovie({
-  selectedId,
-  // setSelectedMovie = { setSelectedMovie },
-}) {
+function SelectedMovie({ selectedId, setSelectedId, handleAddToWathedList }) {
   const [selectedMovie, setSelectedMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [userRating, setUserRating] = useState(0);
 
   const {
     Poster: poster,
@@ -369,7 +382,6 @@ function SelectedMovie({
     <DisplayError message={error} />
   ) : (
     <>
-      (
       <div className="selected-movie">
         <section className="movie-overview">
           <img
@@ -388,7 +400,30 @@ function SelectedMovie({
         </section>
         <section>
           <div className="rate-movie">
-            <StarComponent maxLength={10} size={24} />
+            <StarComponent
+              maxLength={10}
+              size={24}
+              onSetRating={setUserRating}
+            />
+            {userRating ? (
+              <button
+                className="add-watchlist-btn"
+                onClick={() =>
+                  handleAddToWathedList({
+                    runtime: parseInt(runtime),
+                    title,
+                    imdbRating: parseInt(imdbRating),
+                    userRating,
+                    poster,
+                    imdbID: selectedId,
+                  })
+                }
+              >
+                + Add To Watchlist
+              </button>
+            ) : (
+              ''
+            )}
           </div>
           <p>{plot}</p>
           <p>Starring {actors}</p>
@@ -397,13 +432,12 @@ function SelectedMovie({
         <button
           className="back-btn"
           onClick={() => {
-            setSelectedMovie('');
+            setSelectedId(null);
           }}
         >
           &larr;
         </button>
       </div>
-      );
     </>
   );
 }
