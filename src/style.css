@@ -110,8 +110,19 @@ main > section {
   color: #f7f7f7cf;
   position: relative;
   min-height: 30rem;
-  max-height: 65rem;
+  max-height: 60rem;
   overflow: auto;
+}
+
+main > section::-webkit-scrollbar {
+  width: 0.5rem;
+  background-color: rgba(55, 56, 61, 0.1);
+  border-radius: 100vw;
+}
+
+main > section::-webkit-scrollbar-thumb {
+  border-radius: 100vw;
+  background-color: #5b38d2;
 }
 
 li {
@@ -185,25 +196,23 @@ li h4 {
 
 .movie-overview {
   display: flex;
+  align-items: center;
   gap: 3.2rem;
   background-color: #343a40;
+  /* padding: 3px; */
 }
 
 .movie-overview-image {
-  width: 50%;
-}
-
-.movie-overview-image img {
-  height: 100%;
-  width: 100%;
+  width: 17rem;
+  /* height: 100%; */
 }
 
 .movie-overview-details {
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
-  margin-block: 3.2rem;
-  margin-right: 1.6rem;
+  /* margin-block: 3.2rem;
+  margin-right: 1.6rem; */
   /* padding: 3.2rem; */
 }
 
