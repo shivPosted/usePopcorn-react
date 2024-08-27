@@ -54,8 +54,7 @@ const tempWatchedData = [
 
 const userRatingStoredObj = {};
 
-const average = arr =>
-  Number(arr.reduce((accum, cur) => accum + cur) / arr.length).toFixed(1);
+const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
 async function fetchMovies(query, setState, setLoading, setError) {
   setLoading(true);
@@ -308,13 +307,13 @@ function UserSummary({ watched }) {
           #️⃣ <span>{watched.length}</span> Movies
         </div>
         <div className="stats-imdb-avg-ratings">
-          ⭐ <span>{avgImdbRating}</span>
+          ⭐ <span>{+avgImdbRating.toFixed(1)}</span>
         </div>
         <div className="stats-your-avg-ratings">
-          🌟 <span>{avgUserRating}</span>
+          🌟 <span>{+avgUserRating.toFixed(1)}</span>
         </div>
         <div className="stats-watch-time">
-          ⌛ <span>{avgRunTime}</span> min
+          ⌛ <span>{+avgRunTime.toFixed(1)}</span> min
         </div>
       </div>
     </div>
@@ -326,12 +325,8 @@ function WatchedMovieList({ movies, setWathList }) {
 
   function handleDelete() {
     console.log('clicked');
-    const deletIndex = movies.findIndex(movie => movie.imdbID === hoverId);
-    console.log(deletIndex, movies);
 
-    const newArr = [...movies];
-    newArr.splice(deletIndex, 1);
-    setWathList(newArr);
+    setWathList(list => list.filter(item => item.imdbID !== hoverId));
   }
   return (
     <ul>
@@ -340,6 +335,7 @@ function WatchedMovieList({ movies, setWathList }) {
           key={movie.imdbID}
           onMouseEnter={() => setHoverId(movie.imdbID)}
           onMouseLeave={() => setHoverId(null)}
+          className="watch-list-row"
         >
           <div className="img-container">
             <img src={movie.poster} alt={`${movie.title} Poster`} />
@@ -357,7 +353,7 @@ function WatchedMovieList({ movies, setWathList }) {
             </div>
           </div>
           {movie.imdbID === hoverId ? (
-            <DeleteButton handleClick={() => handleDelete(movie.imdbID)} />
+            <DeleteButton handleClick={handleDelete} />
           ) : (
             ''
           )}
@@ -376,6 +372,7 @@ function SelectedMovie({
   // let showAddBtn = false;
 
   const iswatched = watchlist.find(movie => movie.imdbID === selectedId);
+
   function defaultRatingHandle() {
     // if (!movieInList) return;
 
@@ -442,6 +439,11 @@ function SelectedMovie({
     fetchMovieData(selectedId);
     defaultRatingHandle();
   }, [selectedId]);
+
+  useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+  }, [title]);
 
   return isLoading ? (
     <Loader />

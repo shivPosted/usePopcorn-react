@@ -39,6 +39,7 @@ button {
   padding: 1rem;
   background-color: #1c2022;
   cursor: pointer;
+  z-index: 200;
 }
 
 .flex {
@@ -141,14 +142,15 @@ li {
   grid-template-columns: 2fr 8fr;
   padding: 1.6rem 2.4rem;
   border-bottom: 2px solid #77777722;
-  cursor: pointer;
   transition: all 0.3s;
 }
 
 
 
+
 .search-list-row:hover {
   background-color: #343a40;
+  cursor: pointer;
 }
 
 .img-container {
@@ -290,11 +292,17 @@ li h4 {
 }
 
 
+
+.watch-list-row{
+  position: relative;
+}
+
 .delete-movie-btn{
   /* padding: 1rem; */
   background-color: red;
   cursor: pointer;
   right: 2%;
+  top: 0.5rem;
   width: 4rem;
   height: 4rem;
   border-radius: 5px;
