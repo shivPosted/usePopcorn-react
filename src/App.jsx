@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import './style.css';
 import { API_key } from './Util';
 import { jsx } from 'react/jsx-runtime';
@@ -49,6 +49,8 @@ const tempWatchedData = [
     userRating: 9,
   },
 ];
+
+const userRatingStoredObj = {};
 
 const average = arr =>
   Number(arr.reduce((accum, cur) => accum + cur) / arr.length).toFixed(1);
@@ -118,11 +120,20 @@ function App() {
   }, [query]);
 
   function handleAddToWathedList(passedMovie) {
-    setWatched(cur => {
-      console.log(typeof cur);
-      if (cur.find(movie => movie.imdbID === selectedId)) return cur;
-      return [...cur, passedMovie];
-    });
+    const isPresent = watched.findIndex(
+      movie => movie.imdbID === passedMovie.imdbID
+    );
+    if (!(isPresent === -1)) return null;
+
+    // const newArr =
+    //   isPresent === -1 ? [...watched] : [...watched].splice(isPresent, 1);
+
+    // newArr.push(passedMovie);
+    setWatched(cur => [...cur, passedMovie]);
+
+    // setMovies(cur => )
+    userRatingStoredObj[passedMovie.imdbID] = passedMovie.userRating; //adding userrating to the userrating object for current movie
+    console.log(userRatingStoredObj);
     setSelectedId(null);
   }
   return (
@@ -150,6 +161,7 @@ function App() {
               selectedId={selectedId}
               setSelectedId={setSelectedId}
               handleAddToWathedList={handleAddToWathedList}
+              watchlist={watched}
             />
           ) : (
             <>
@@ -331,7 +343,24 @@ function WatchedMovieList({ movies }) {
   );
 }
 
-function SelectedMovie({ selectedId, setSelectedId, handleAddToWathedList }) {
+function SelectedMovie({
+  selectedId,
+  setSelectedId,
+  handleAddToWathedList,
+  watchlist,
+}) {
+  // let showAddBtn = false;
+
+  const iswatched = watchlist.find(movie => movie.imdbID === selectedId);
+  function defaultRatingHandle() {
+    // if (!movieInList) return;
+
+    const defaultRating = iswatched ? iswatched.userRating : 0;
+    setUserRating(defaultRating);
+    // showAddBtn = true;
+  }
+
+  // const defaultRating =
   const [selectedMovie, setSelectedMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -348,6 +377,19 @@ function SelectedMovie({ selectedId, setSelectedId, handleAddToWathedList }) {
     Runtime: runtime,
     imdbRating,
   } = selectedMovie;
+
+  function handleAddOnClick() {
+    const newMovie = {
+      runtime: parseInt(runtime),
+      title,
+      imdbRating: parseInt(imdbRating),
+      userRating,
+      poster,
+      imdbID: selectedId,
+    };
+
+    handleAddToWathedList(newMovie);
+  }
 
   useEffect(() => {
     async function fetchMovieData() {
@@ -374,6 +416,7 @@ function SelectedMovie({ selectedId, setSelectedId, handleAddToWathedList }) {
     }
 
     fetchMovieData(selectedId);
+    defaultRatingHandle();
   }, [selectedId]);
 
   return isLoading ? (
@@ -400,29 +443,27 @@ function SelectedMovie({ selectedId, setSelectedId, handleAddToWathedList }) {
         </section>
         <section>
           <div className="rate-movie">
-            <StarComponent
-              maxLength={10}
-              size={24}
-              onSetRating={setUserRating}
-            />
-            {userRating ? (
-              <button
-                className="add-watchlist-btn"
-                onClick={() =>
-                  handleAddToWathedList({
-                    runtime: parseInt(runtime),
-                    title,
-                    imdbRating: parseInt(imdbRating),
-                    userRating,
-                    poster,
-                    imdbID: selectedId,
-                  })
-                }
-              >
-                + Add To Watchlist
-              </button>
+            {!iswatched ? (
+              <>
+                <StarComponent
+                  maxLength={10}
+                  size={24}
+                  onSetRating={setUserRating}
+                  defaultRating={userRating}
+                />
+                {userRating > 0 ? (
+                  <button
+                    className="add-watchlist-btn"
+                    onClick={handleAddOnClick}
+                  >
+                    + Add To Watchlist
+                  </button>
+                ) : (
+                  ''
+                )}
+              </>
             ) : (
-              ''
+              <p>You already rated this movie</p>
             )}
           </div>
           <p>{plot}</p>

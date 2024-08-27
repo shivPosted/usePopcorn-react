@@ -52,7 +52,7 @@ export default function StarComponent({
 
   function handleClick(value) {
     setStarCount(cur => (cur === value ? 0 : value));
-    onSetRating(value);
+    onSetRating(cur => (cur === value ? 0 : value));
   }
   return (
     <div className="container" style={styleContainer}>
