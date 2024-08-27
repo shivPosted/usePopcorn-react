@@ -407,6 +407,10 @@ function SelectedMovie({
     imdbRating,
   } = selectedMovie;
 
+  function handleOnBackClick() {
+    setSelectedId(null);
+  }
+
   function handleAddOnClick() {
     const newMovie = {
       runtime: parseInt(runtime),
@@ -460,6 +464,18 @@ function SelectedMovie({
 
     return () => (document.title = 'usePopcorn'); //cleanup function
   }, [title]);
+
+  useEffect(() => {
+    const keydownEvent = function (e) {
+      console.log('closing');
+      if (e.key === 'Escape') handleOnBackClick();
+    };
+
+    document.addEventListener('keydown', keydownEvent);
+    return () => {
+      document.removeEventListener('keydown', keydownEvent);
+    };
+  }, [handleOnBackClick]);
 
   return isLoading ? (
     <Loader />
@@ -515,12 +531,7 @@ function SelectedMovie({
           <p>Starring {actors}</p>
           <p>Directed by {director}</p>
         </section>
-        <button
-          className="back-btn"
-          onClick={() => {
-            setSelectedId(null);
-          }}
-        >
+        <button className="back-btn" onClick={handleOnBackClick}>
           &larr;
         </button>
       </div>
