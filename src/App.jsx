@@ -56,12 +56,14 @@ const userRatingStoredObj = {};
 
 const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
-async function fetchMovies(query, setState, setLoading, setError) {
+async function fetchMovies(query, setState, setLoading, setError, controller) {
   setLoading(true);
   setError('');
+
   try {
     const res = await fetch(
-      `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`
+      `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`,
+      { signal: controller.signal }
     );
     if (!res.ok) throw new Error(`Failed: ${res.status + res.statusText}`);
 
@@ -70,10 +72,11 @@ async function fetchMovies(query, setState, setLoading, setError) {
     setState(data.Search);
     console.log(data);
   } catch (err) {
-    setError(err.message);
-    console.error(err.message);
+    if (err.name !== 'AbortError') {
+      setError(err.message);
+    }
   } finally {
-    // setError('Try Searching');
+    setError('');
     setLoading(false);
   }
 }
@@ -112,12 +115,17 @@ function App() {
   //   }
   // }
   useEffect(() => {
+    const controller = new AbortController();
     if (query.length < 3) {
       setError('');
       setMovies([]);
       return;
     }
-    fetchMovies(query, setMovies, setIsLoading, setError);
+    fetchMovies(query, setMovies, setIsLoading, setError, controller);
+
+    return () => {
+      controller.abort();
+    };
   }, [query]);
 
   function handleAddToWathedList(passedMovie) {
@@ -373,13 +381,13 @@ function SelectedMovie({
 
   const iswatched = watchlist.find(movie => movie.imdbID === selectedId);
 
-  function defaultRatingHandle() {
-    // if (!movieInList) return;
+  // function defaultRatingHandle() {
+  //   // if (!movieInList) return;
 
-    const defaultRating = iswatched ? iswatched.userRating : 0;
-    setUserRating(defaultRating);
-    // showAddBtn = true;
-  }
+  //   const defaultRating = iswatched ? iswatched.userRating : 0;
+  //   setUserRating(defaultRating);
+  //   // showAddBtn = true;
+  // }
 
   // const defaultRating =
   const [selectedMovie, setSelectedMovie] = useState({});
@@ -413,12 +421,16 @@ function SelectedMovie({
   }
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function fetchMovieData() {
       setError('');
       setIsLoading(true);
       try {
         const res = await fetch(
-          `https://www.omdbapi.com/?i=${selectedId}&apikey=${API_key}`
+          `https://www.omdbapi.com/?i=${selectedId}&apikey=${API_key}`,
+
+          { signal }
         );
         if (!res.ok) throw new Error(`Failed: ${res.status} ${res.statusText}`);
 
@@ -437,12 +449,16 @@ function SelectedMovie({
     }
 
     fetchMovieData(selectedId);
-    defaultRatingHandle();
+
+    () => controller.abort();
+    // defaultRatingHandle();
   }, [selectedId]);
 
   useEffect(() => {
     if (!title) return;
     document.title = `Movie | ${title}`;
+
+    return () => (document.title = 'usePopcorn'); //cleanup function
   }, [title]);
 
   return isLoading ? (

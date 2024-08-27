@@ -268,15 +268,17 @@ li h4 {
 
 .back-btn {
   position: absolute;
-  left: 0.5rem;
-  top: 0.4rem;
+  left: 2%;
+  top: 1%;
   background-color: #fff;
   color: #000;
   border-radius: 50%;
-  padding: 5px;
+  padding: 0.4rem;
   /* width: 4.8rem;
   height: 4.8rem; */
   font-size: 2.4rem;
+  box-shadow: 0 1px 4px 4px #00000041;
+  cursor: pointer;
 }
 
 .add-watchlist-btn {
@@ -299,7 +301,7 @@ li h4 {
 
 .delete-movie-btn{
   /* padding: 1rem; */
-  background-color: red;
+  background-color: #ef4444;
   cursor: pointer;
   right: 2%;
   top: 0.5rem;
@@ -308,6 +310,10 @@ li h4 {
   border-radius: 5px;
   box-shadow: 0 1px 4px 4px #3131312c;
   padding: 0.7rem;
+  transition: all 0.3s;
+}
+.delete-movie-btn:hover {
+background-color: #dc2626;
 }
 
 .delete-movie-btn > svg {
