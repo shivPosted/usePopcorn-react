@@ -18,13 +18,17 @@ ul {
 }
 
 button {
-  border: none;
-  width: 3.2rem;
-  height: 3.2rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
+  border: none;
+}
+
+.collapse-show-btn {
+  width: 3.2rem;
+  height: 3.2rem;
   right: 1rem;
   top: 1rem;
   /* height: 3.2rem; */
@@ -94,7 +98,10 @@ input:focus {
   box-shadow: 0 2px 4px 4px #7777774b;
 }
 
-input::placeholder {
+input::placeholder 
+  gap: 2.4rem;
+
+{
   color: #f7f7f77d;
 }
 
@@ -248,14 +255,16 @@ li h4 {
 }
 
 .back-btn {
-  left: 2%;
+  position: absolute;
+  left: 0.5rem;
+  top: 0.4rem;
   background-color: #fff;
   color: #000;
-  /* display: flex; */
-  /* padding: 1rem; */
+  border-radius: 50%;
+  padding: 5px;
   /* width: 4.8rem;
   height: 4.8rem; */
-  font-size: 2.8rem;
+  font-size: 2.4rem;
 }
 
 .add-watchlist-btn {
@@ -263,7 +272,30 @@ li h4 {
   font-size: 1.6rem;
   padding: 1.2rem 2.4rem;
   background-color: #6f46f1;
+  color: #fff;
   width: auto;
   height: auto;
   border-radius: 100vw;
+  cursor: pointer;
+}
+
+
+.delete-movie-btn{
+  /* padding: 1rem; */
+  background-color: red;
+  cursor: pointer;
+  right: 2%;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px 4px #3131312c;
+  padding: 0.7rem;
+}
+
+.delete-movie-btn > svg {
+/* width: 3.2rem;
+height: 3.2rem; */
+color: #fff;
+/* stroke: #fff; */
+/* fill: #fff; */
 }

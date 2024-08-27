@@ -3,6 +3,8 @@ import './style.css';
 import { API_key } from './Util';
 import { jsx } from 'react/jsx-runtime';
 import StarComponent from './StarComponent';
+import DeleteButton from './deleteButton';
+
 const tempMovieData = [
   {
     imdbID: 'tt1375666',
@@ -166,7 +168,7 @@ function App() {
           ) : (
             <>
               <UserSummary watched={watched} />
-              <WatchedMovieList movies={watched} />
+              <WatchedMovieList movies={watched} setWathList={setWatched} />
             </>
           )}
         </Box>
@@ -233,6 +235,7 @@ function Box({ children }) {
   return (
     <section className="result-display-section">
       <button
+        className="collapse-show-btn"
         onClick={() => {
           setIsOpen(cur => !cur);
         }}
@@ -317,11 +320,26 @@ function UserSummary({ watched }) {
   );
 }
 
-function WatchedMovieList({ movies }) {
+function WatchedMovieList({ movies, setWathList }) {
+  const [hoverId, setHoverId] = useState(null);
+
+  function handleDelete() {
+    console.log('clicked');
+    const deletIndex = movies.findIndex(movie => movie.imdbID === hoverId);
+    console.log(deletIndex, movies);
+
+    const newArr = [...movies];
+    newArr.splice(deletIndex, 1);
+    setWathList(newArr);
+  }
   return (
     <ul>
       {movies?.map(movie => (
-        <li key={movie.imdbID}>
+        <li
+          key={movie.imdbID}
+          onMouseEnter={() => setHoverId(movie.imdbID)}
+          onMouseLeave={() => setHoverId(null)}
+        >
           <div className="img-container">
             <img src={movie.poster} alt={`${movie.title} Poster`} />
           </div>
@@ -337,6 +355,11 @@ function WatchedMovieList({ movies }) {
               ⌛ <span>{movie.runtime}</span>
             </div>
           </div>
+          {movie.imdbID === hoverId ? (
+            <DeleteButton handleClick={() => handleDelete(movie.imdbID)} />
+          ) : (
+            ''
+          )}
         </li>
       ))}
     </ul>
@@ -463,7 +486,10 @@ function SelectedMovie({
                 )}
               </>
             ) : (
-              <p>You already rated this movie</p>
+              <p>
+                You gave this movie <strong>{iswatched.userRating}</strong>⭐
+                rating
+              </p>
             )}
           </div>
           <p>{plot}</p>
