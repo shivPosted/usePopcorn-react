@@ -146,7 +146,7 @@ function App() {
         <NumResult searchLength={searchLength} />
       </NavBar>
       <Main>
-        <Box>
+        <Box className="result-display-section">
           {!error ? (
             isLoading ? (
               <Loader />
@@ -157,7 +157,7 @@ function App() {
             <DisplayError message={error} />
           )}
         </Box>
-        <Box>
+        <Box className="watch-list-section">
           {selectedId ? (
             <SelectedMovie
               selectedId={selectedId}
@@ -230,10 +230,10 @@ function Main({ children }) {
   return <main className="grid">{children}</main>;
 }
 
-function Box({ children }) {
+function Box({ children, className }) {
   const [isOpen, setIsOpen] = useState(true);
   return (
-    <section className="result-display-section">
+    <section className={className}>
       <button
         className="collapse-show-btn"
         onClick={() => {
@@ -252,6 +252,7 @@ function MovieList({ movies, setSelectedId }) {
     <ul>
       {movies?.map(movie => (
         <li
+          className="search-list-row"
           key={movie.imdbID}
           onClick={() => {
             setSelectedId(cur => (cur === movie.imdbID ? null : movie.imdbID));
