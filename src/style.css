@@ -18,7 +18,6 @@ ul {
 }
 
 button {
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,10 +98,9 @@ input:focus {
   box-shadow: 0 2px 4px 4px #7777774b;
 }
 
-input::placeholder 
+input::placeholder {
   gap: 2.4rem;
 
-{
   color: #f7f7f77d;
 }
 
@@ -133,8 +131,6 @@ main > section::-webkit-scrollbar-thumb {
   background-color: #5b38d2;
 }
 
-
-
 li {
   display: grid;
   row-gap: 1rem;
@@ -144,9 +140,6 @@ li {
   border-bottom: 2px solid #77777722;
   transition: all 0.3s;
 }
-
-
-
 
 .search-list-row:hover {
   background-color: #343a40;
@@ -170,7 +163,6 @@ li h4 {
   font-size: 1.6rem;
   font-weight: normal;
 }
-
 
 .watch-list-section {
   position: relative;
@@ -293,13 +285,11 @@ li h4 {
   cursor: pointer;
 }
 
-
-
-.watch-list-row{
+.watch-list-row {
   position: relative;
 }
 
-.delete-movie-btn{
+.delete-movie-btn {
   /* padding: 1rem; */
   background-color: #ef4444;
   cursor: pointer;
@@ -313,13 +303,13 @@ li h4 {
   transition: all 0.3s;
 }
 .delete-movie-btn:hover {
-background-color: #dc2626;
+  background-color: #dc2626;
 }
 
 .delete-movie-btn > svg {
-/* width: 3.2rem;
+  /* width: 3.2rem;
 height: 3.2rem; */
-color: #fff;
-/* stroke: #fff; */
-/* fill: #fff; */
+  color: #fff;
+  /* stroke: #fff; */
+  /* fill: #fff; */
 }

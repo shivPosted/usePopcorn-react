@@ -1,58 +1,8 @@
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import './style.css';
 import { API_key } from './Util';
-import { jsx } from 'react/jsx-runtime';
 import StarComponent from './StarComponent';
 import DeleteButton from './deleteButton';
-
-const tempMovieData = [
-  {
-    imdbID: 'tt1375666',
-    Title: 'Inception',
-    Year: '2010',
-    Poster:
-      'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-  },
-  {
-    imdbID: 'tt0133093',
-    Title: 'The Matrix',
-    Year: '1999',
-    Poster:
-      'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg',
-  },
-  {
-    imdbID: 'tt6751668',
-    Title: 'Parasite',
-    Year: '2019',
-    Poster:
-      'https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg',
-  },
-];
-
-const tempWatchedData = [
-  {
-    imdbID: 'tt1375666',
-    Title: 'Inception',
-    Year: '2010',
-    Poster:
-      'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: 'tt0088763',
-    Title: 'Back to the Future',
-    Year: '1985',
-    Poster:
-      'https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
-
-const userRatingStoredObj = {};
 
 const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
@@ -70,7 +20,6 @@ async function fetchMovies(query, setState, setLoading, setError, controller) {
     const data = await res.json();
     if (data.Response === 'False') throw new Error(data.Error);
     setState(data.Search);
-    console.log(data);
   } catch (err) {
     if (err.name !== 'AbortError') {
       setError(err.message);
@@ -86,7 +35,7 @@ function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [query, setQuery] = useState('avengers');
+  const [query, setQuery] = useState('');
   // const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -98,7 +47,6 @@ function App() {
   //     setSelectedMovie(null);
   //     return;
   //   }
-  //   console.log(id);
   //   try {
   //     const res = await fetch(
   //       `https://www.omdbapi.com/?i=${id}&apikey=${API_key}`
@@ -109,18 +57,19 @@ function App() {
 
   //     if (data.Response === 'False') throw new Error(data.Error);
   //     setSelectedMovie(data);
-  //     console.log(data);
   //   } catch (err) {
-  //     console.log(err.message);
   //   }
   // }
   useEffect(() => {
     const controller = new AbortController();
+
     if (query.length < 3) {
       setError('');
       setMovies([]);
       return;
     }
+
+    setSelectedId(null);
     fetchMovies(query, setMovies, setIsLoading, setError, controller);
 
     return () => {
@@ -141,8 +90,6 @@ function App() {
     setWatched(cur => [...cur, passedMovie]);
 
     // setMovies(cur => )
-    userRatingStoredObj[passedMovie.imdbID] = passedMovie.userRating; //adding userrating to the userrating object for current movie
-    console.log(userRatingStoredObj);
     setSelectedId(null);
   }
   return (
@@ -218,8 +165,6 @@ function SearchBox({ setQuery, query }) {
       value={query}
       onChange={e => {
         setQuery(e.target.value);
-
-        console.log(e.target.value);
       }}
     />
   );
@@ -332,8 +277,6 @@ function WatchedMovieList({ movies, setWathList }) {
   const [hoverId, setHoverId] = useState(null);
 
   function handleDelete() {
-    console.log('clicked');
-
     setWathList(list => list.filter(item => item.imdbID !== hoverId));
   }
   return (
@@ -443,10 +386,8 @@ function SelectedMovie({
         if (data.Response === 'False') throw new Error(data.Error);
 
         setSelectedMovie(data);
-        console.log(data);
       } catch (err) {
         setError(err.message);
-        console.log(err.message);
       } finally {
         setIsLoading(false);
       }
@@ -467,7 +408,6 @@ function SelectedMovie({
 
   useEffect(() => {
     const keydownEvent = function (e) {
-      console.log('closing');
       if (e.key === 'Escape') handleOnBackClick();
     };
 
@@ -538,7 +478,5 @@ function SelectedMovie({
     </>
   );
 }
-
-// console.log(avgImdbRating, avgUserRating);
 
 export default App;
