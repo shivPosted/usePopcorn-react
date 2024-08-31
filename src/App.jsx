@@ -32,7 +32,11 @@ async function fetchMovies(query, setState, setLoading, setError, controller) {
 
 function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(() => {
+    const list = localStorage.getItem('watchedList');
+    if(list) return JSON.parse(list) 
+    return [];
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
@@ -76,6 +80,10 @@ function App() {
       controller.abort();
     };
   }, [query]);
+  
+  useEffect(() => {
+  localStorage.setItem('watchedList', JSON.stringify(watched))
+  }, [watched])
 
   function handleAddToWathedList(passedMovie) {
     const isPresent = watched.findIndex(
@@ -88,7 +96,6 @@ function App() {
 
     // newArr.push(passedMovie);
     setWatched(cur => [...cur, passedMovie]);
-
     // setMovies(cur => )
     setSelectedId(null);
   }
@@ -247,7 +254,7 @@ function UserSummary({ watched }) {
   let avgImdbRating = 0;
   let avgUserRating = 0;
   let avgRunTime = 0;
-  if (!(watched.length === 0)) {
+  if (!( watched.length === 0 ) ) {
     avgImdbRating = average(watched?.map(movie => movie.imdbRating));
     avgUserRating = average(watched?.map(movie => movie.userRating));
     avgRunTime = average(watched?.map(movie => movie.runtime));
@@ -274,6 +281,7 @@ function UserSummary({ watched }) {
 }
 
 function WatchedMovieList({ movies, setWathList }) {
+  console.log(movies);
   const [hoverId, setHoverId] = useState(null);
 
   function handleDelete() {
