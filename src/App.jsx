@@ -1,45 +1,47 @@
-import { useEffect, useState } from 'react';
-import './style.css';
-import { API_key } from './Util';
-import StarComponent from './StarComponent';
-import DeleteButton from './deleteButton';
+import { useEffect, useRef, useState } from "react";
+import "./style.css";
+import { API_key } from "./Util";
+import StarComponent from "./StarComponent";
+import DeleteButton from "./deleteButton";
 
-const average = arr => arr.reduce((accum, cur) => accum + cur) / arr.length;
+const average = (arr) => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
 async function fetchMovies(query, setState, setLoading, setError, controller) {
   setLoading(true);
-  setError('');
+  setError("");
 
   try {
     const res = await fetch(
       `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`,
-      { signal: controller.signal }
+      { signal: controller.signal },
     );
     if (!res.ok) throw new Error(`Failed: ${res.status + res.statusText}`);
 
     const data = await res.json();
-    if (data.Response === 'False') throw new Error(data.Error);
+    if (data.Response === "False") throw new Error(data.Error);
     setState(data.Search);
   } catch (err) {
-    if (err.name !== 'AbortError') {
+    if (err.name !== "AbortError") {
       setError(err.message);
     }
   } finally {
-    setError('');
+    setError("");
     setLoading(false);
   }
 }
 
 function App() {
   const [movies, setMovies] = useState([]);
+
   const [watched, setWatched] = useState(() => {
-    const list = localStorage.getItem('watchedList');
-    if(list) return JSON.parse(list) 
+    const list = localStorage.getItem("watchedList");
+    if (list) return JSON.parse(list);
     return [];
   });
+
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [query, setQuery] = useState('');
+  const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
   // const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -64,11 +66,12 @@ function App() {
   //   } catch (err) {
   //   }
   // }
+
   useEffect(() => {
     const controller = new AbortController();
 
     if (query.length < 3) {
-      setError('');
+      setError("");
       setMovies([]);
       return;
     }
@@ -80,14 +83,14 @@ function App() {
       controller.abort();
     };
   }, [query]);
-  
+
   useEffect(() => {
-  localStorage.setItem('watchedList', JSON.stringify(watched))
-  }, [watched])
+    localStorage.setItem("watchedList", JSON.stringify(watched));
+  }, [watched]);
 
   function handleAddToWathedList(passedMovie) {
     const isPresent = watched.findIndex(
-      movie => movie.imdbID === passedMovie.imdbID
+      (movie) => movie.imdbID === passedMovie.imdbID,
     );
     if (!(isPresent === -1)) return null;
 
@@ -95,7 +98,7 @@ function App() {
     //   isPresent === -1 ? [...watched] : [...watched].splice(isPresent, 1);
 
     // newArr.push(passedMovie);
-    setWatched(cur => [...cur, passedMovie]);
+    setWatched((cur) => [...cur, passedMovie]);
     // setMovies(cur => )
     setSelectedId(null);
   }
@@ -165,12 +168,40 @@ function Logo() {
 
 function SearchBox({ setQuery, query }) {
   // const [search, setSearch] = useState('');
+
+  //NOTE: -- how not to select elements in dom👇
+  //
+  // useEffect(() => {
+  //   const input = document.querySelector(".input-field");
+  //   input.focus();
+  // }, []);
+
+  //HACK: -- how to select dom element in react using refs
+
+  const inputEl = useRef(null);
+
+  useEffect(() => {
+    const callBack = function (e) {
+      if (document.activeElement === inputEl.current) return;
+
+      if (e.code === "Enter") {
+        inputEl.current.focus();
+        setQuery("");
+      }
+    };
+    document.addEventListener("keydown", callBack);
+
+    return () => document.removeEventListener("keydown", callBack);
+  }, [setQuery]);
+
   return (
     <input
       type="text"
+      className="input-field"
       placeholder="Search movies..."
       value={query}
-      onChange={e => {
+      ref={inputEl}
+      onChange={(e) => {
         setQuery(e.target.value);
       }}
     />
@@ -196,10 +227,10 @@ function Box({ children, className }) {
       <button
         className="collapse-show-btn"
         onClick={() => {
-          setIsOpen(cur => !cur);
+          setIsOpen((cur) => !cur);
         }}
       >
-        {isOpen ? '-' : '+'}
+        {isOpen ? "-" : "+"}
       </button>
       {isOpen && children}
     </section>
@@ -209,12 +240,14 @@ function Box({ children, className }) {
 function MovieList({ movies, setSelectedId }) {
   return (
     <ul>
-      {movies?.map(movie => (
+      {movies?.map((movie) => (
         <li
           className="search-list-row"
           key={movie.imdbID}
           onClick={() => {
-            setSelectedId(cur => (cur === movie.imdbID ? null : movie.imdbID));
+            setSelectedId((cur) =>
+              cur === movie.imdbID ? null : movie.imdbID,
+            );
           }}
         >
           <div className="img-container">
@@ -254,10 +287,10 @@ function UserSummary({ watched }) {
   let avgImdbRating = 0;
   let avgUserRating = 0;
   let avgRunTime = 0;
-  if (!( watched.length === 0 ) ) {
-    avgImdbRating = average(watched?.map(movie => movie.imdbRating));
-    avgUserRating = average(watched?.map(movie => movie.userRating));
-    avgRunTime = average(watched?.map(movie => movie.runtime));
+  if (!(watched.length === 0)) {
+    avgImdbRating = average(watched?.map((movie) => movie.imdbRating));
+    avgUserRating = average(watched?.map((movie) => movie.userRating));
+    avgRunTime = average(watched?.map((movie) => movie.runtime));
   }
   return (
     <div className="user-movies-overview flex">
@@ -285,11 +318,11 @@ function WatchedMovieList({ movies, setWathList }) {
   const [hoverId, setHoverId] = useState(null);
 
   function handleDelete() {
-    setWathList(list => list.filter(item => item.imdbID !== hoverId));
+    setWathList((list) => list.filter((item) => item.imdbID !== hoverId));
   }
   return (
     <ul>
-      {movies?.map(movie => (
+      {movies?.map((movie) => (
         <li
           key={movie.imdbID}
           onMouseEnter={() => setHoverId(movie.imdbID)}
@@ -314,7 +347,7 @@ function WatchedMovieList({ movies, setWathList }) {
           {movie.imdbID === hoverId ? (
             <DeleteButton handleClick={handleDelete} />
           ) : (
-            ''
+            ""
           )}
         </li>
       ))}
@@ -330,7 +363,7 @@ function SelectedMovie({
 }) {
   // let showAddBtn = false;
 
-  const iswatched = watchlist.find(movie => movie.imdbID === selectedId);
+  const iswatched = watchlist.find((movie) => movie.imdbID === selectedId);
 
   // function defaultRatingHandle() {
   //   // if (!movieInList) return;
@@ -343,7 +376,7 @@ function SelectedMovie({
   // const defaultRating =
   const [selectedMovie, setSelectedMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [userRating, setUserRating] = useState(0);
 
   const {
@@ -379,19 +412,19 @@ function SelectedMovie({
     const controller = new AbortController();
     const signal = controller.signal;
     async function fetchMovieData() {
-      setError('');
+      setError("");
       setIsLoading(true);
       try {
         const res = await fetch(
           `https://www.omdbapi.com/?i=${selectedId}&apikey=${API_key}`,
 
-          { signal }
+          { signal },
         );
         if (!res.ok) throw new Error(`Failed: ${res.status} ${res.statusText}`);
 
         const data = await res.json();
 
-        if (data.Response === 'False') throw new Error(data.Error);
+        if (data.Response === "False") throw new Error(data.Error);
 
         setSelectedMovie(data);
       } catch (err) {
@@ -411,17 +444,17 @@ function SelectedMovie({
     if (!title) return;
     document.title = `Movie | ${title}`;
 
-    return () => (document.title = 'usePopcorn'); //cleanup function
+    return () => (document.title = "usePopcorn"); //cleanup function
   }, [title]);
 
   useEffect(() => {
     const keydownEvent = function (e) {
-      if (e.key === 'Escape') handleOnBackClick();
+      if (e.key === "Escape") handleOnBackClick();
     };
 
-    document.addEventListener('keydown', keydownEvent);
+    document.addEventListener("keydown", keydownEvent);
     return () => {
-      document.removeEventListener('keydown', keydownEvent);
+      document.removeEventListener("keydown", keydownEvent);
     };
   }, [handleOnBackClick]);
 
@@ -465,7 +498,7 @@ function SelectedMovie({
                     + Add To Watchlist
                   </button>
                 ) : (
-                  ''
+                  ""
                 )}
               </>
             ) : (
