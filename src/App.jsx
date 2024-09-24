@@ -12,7 +12,7 @@ async function fetchMovies(query, setState, setLoading, setError, controller) {
 
   try {
     const res = await fetch(
-      `http://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`,
+      `https://www.omdbapi.com/?i=tt3896198&apikey=${API_key}&s=${query}`,
       { signal: controller.signal },
     );
     if (!res.ok) throw new Error(`Failed: ${res.status + res.statusText}`);
