@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./style.css";
-import { API_key } from "./Util";
 import StarComponent from "./StarComponent";
 import DeleteButton from "./deleteButton";
 
+const API_key = import.meta.env.VITE_API_key;
+console.log(API_key);
 const average = (arr) => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
 async function fetchMovies(query, setState, setLoading, setError, controller) {
