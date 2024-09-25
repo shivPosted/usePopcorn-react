@@ -4,7 +4,6 @@ import StarComponent from "./StarComponent";
 import DeleteButton from "./deleteButton";
 
 const API_key = import.meta.env.VITE_API_key;
-console.log(API_key);
 const average = (arr) => arr.reduce((accum, cur) => accum + cur) / arr.length;
 
 async function fetchMovies(query, setState, setLoading, setError, controller) {
@@ -315,7 +314,6 @@ function UserSummary({ watched }) {
 }
 
 function WatchedMovieList({ movies, setWathList }) {
-  console.log(movies);
   const [hoverId, setHoverId] = useState(null);
 
   function handleDelete() {
