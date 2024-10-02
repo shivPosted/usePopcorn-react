@@ -16,7 +16,6 @@ export async function fetchMovies(query, dispatch, controller) {
     const data = await res.json();
 
     if (data.Response === "False") throw new Error(data.Error);
-    console.log(data);
     dispatch({ type: "movies/set", payload: data.Search });
   } catch (err) {
     if (err.name !== "AbortError") {
