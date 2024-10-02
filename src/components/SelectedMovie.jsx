@@ -48,7 +48,7 @@ export default function SelectedMovie() {
 
   function handleAddOnClick() {
     const newMovie = {
-      runtime: parseInt(runtime),
+      runtime: isFinite(runtime) ? parseInt(runtime) : 0,
       title,
       imdbRating: parseInt(imdbRating),
       userRating,
