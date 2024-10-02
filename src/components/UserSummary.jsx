@@ -1,6 +1,8 @@
+import { useMovieContext } from "../Contexts/MoviesContext";
 import { average } from "./util";
 
-export default function UserSummary({ watched }) {
+export default function UserSummary() {
+  const { watched } = useMovieContext();
   let avgImdbRating = 0;
   let avgUserRating = 0;
   let avgRunTime = 0;

@@ -3,14 +3,16 @@ import { API_key } from "./util";
 import Loader from "./Loader";
 import DisplayError from "./DisplayError";
 import StarComponent from "./StarComponent";
+import { useMovieContext } from "../Contexts/MoviesContext";
 
-export default function SelectedMovie({
-  selectedId,
-  setSelectedId,
-  handleAddToWathedList,
-  watchlist,
-}) {
+export default function SelectedMovie() {
   // let showAddBtn = false;
+  const {
+    dispatch,
+    selectedId,
+    handleAddToWathedList,
+    watched: watchlist,
+  } = useMovieContext();
 
   const iswatched = watchlist.find((movie) => movie.imdbID === selectedId);
 
@@ -41,7 +43,7 @@ export default function SelectedMovie({
   } = selectedMovie;
 
   function handleOnBackClick() {
-    setSelectedId(null);
+    dispatch({ type: "selectedID/null" });
   }
 
   function handleAddOnClick() {

@@ -1,11 +1,14 @@
 import { useState } from "react";
 import DeleteButton from "./DeleteButton";
+import { useMovieContext } from "../Contexts/MoviesContext";
 
-export default function WatchedMovieList({ movies, setWathList }) {
+export default function WatchedMovieList() {
+  const { watched: movies, dispatch } = useMovieContext();
+
   const [hoverId, setHoverId] = useState(null);
 
   function handleDelete() {
-    setWathList((list) => list.filter((item) => item.imdbID !== hoverId));
+    dispatch({ type: "watched/delete", payload: hoverId });
   }
   return (
     <ul>

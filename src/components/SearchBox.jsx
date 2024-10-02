@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useMovieContext } from "../Contexts/MoviesContext";
 
-export default function SearchBox({ setQuery, query }) {
+export default function SearchBox() {
+  const { dispatch, query } = useMovieContext();
+
   // const [search, setSearch] = useState('');
 
   //NOTE: -- how not to select elements in dom👇
@@ -20,13 +23,13 @@ export default function SearchBox({ setQuery, query }) {
 
       if (e.code === "Enter") {
         inputEl.current.focus();
-        setQuery("");
+        dispatch({ type: "query/set", payload: "" });
       }
     };
     document.addEventListener("keydown", callBack);
 
     return () => document.removeEventListener("keydown", callBack);
-  }, [setQuery]);
+  }, [dispatch]);
 
   return (
     <input
@@ -36,7 +39,7 @@ export default function SearchBox({ setQuery, query }) {
       value={query}
       ref={inputEl}
       onChange={(e) => {
-        setQuery(e.target.value);
+        dispatch({ type: "query/set", payload: e.target.value });
       }}
     />
   );

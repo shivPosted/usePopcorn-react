@@ -1,4 +1,8 @@
-export default function MovieList({ movies, setSelectedId }) {
+import { useMovieContext } from "../Contexts/MoviesContext";
+
+export default function MovieList() {
+  const { movies, dispatch } = useMovieContext();
+
   return (
     <ul>
       {movies?.map((movie) => (
@@ -6,9 +10,7 @@ export default function MovieList({ movies, setSelectedId }) {
           className="search-list-row"
           key={movie.imdbID}
           onClick={() => {
-            setSelectedId((cur) =>
-              cur === movie.imdbID ? null : movie.imdbID,
-            );
+            dispatch({ type: "selectedID/set", payload: movie.imdbID });
           }}
         >
           <div className="img-container">
