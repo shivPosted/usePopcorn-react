@@ -48,7 +48,7 @@ export default function SelectedMovie() {
 
   function handleAddOnClick() {
     const newMovie = {
-      runtime: isFinite(runtime) ? parseInt(runtime) : 0,
+      runtime: isFinite(parseInt(runtime)) ? parseInt(runtime) : 0,
       title,
       imdbRating: parseInt(imdbRating),
       userRating,
@@ -79,7 +79,7 @@ export default function SelectedMovie() {
 
         setSelectedMovie(data);
       } catch (err) {
-        setError(err.message);
+        if (err.name !== "AbortError") setError(err.message);
       } finally {
         setIsLoading(false);
       }
@@ -87,7 +87,7 @@ export default function SelectedMovie() {
 
     fetchMovieData(selectedId);
 
-    () => controller.abort();
+    return () => controller.abort();
     // defaultRatingHandle();
   }, [selectedId]);
 
