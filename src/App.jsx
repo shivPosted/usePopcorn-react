@@ -12,6 +12,8 @@ import SelectedMovie from "./components/SelectedMovie";
 import UserSummary from "./components/UserSummary";
 import WatchedMovieList from "./components/WatchedMovieList";
 import { useMovieContext } from "./Contexts/MoviesContext";
+import { useEffect } from "react";
+import supabase from "./supabse";
 
 function App() {
   const { isLoading, error, selectedId } = useMovieContext();
@@ -50,6 +52,10 @@ function App() {
   //   }
   // }
 
+  useEffect(() => {
+    const sp = supabase;
+    console.log(sp);
+  }, []);
   return (
     <>
       <NavBar>
