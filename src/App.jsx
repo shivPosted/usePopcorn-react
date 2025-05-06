@@ -52,10 +52,6 @@ function App() {
   //   }
   // }
 
-  useEffect(() => {
-    const sp = supabase;
-    console.log(sp);
-  }, []);
   return (
     <>
       <NavBar>

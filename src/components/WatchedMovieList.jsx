@@ -1,15 +1,17 @@
 import { useState } from "react";
 import DeleteButton from "./DeleteButton";
 import { useMovieContext } from "../Contexts/MoviesContext";
+import { deleteMovie } from "./util";
 
 export default function WatchedMovieList() {
-  const { watched: movies, dispatch } = useMovieContext();
+  const { watched: movies, dispatch, loading } = useMovieContext();
 
   const [hoverId, setHoverId] = useState(null);
 
   function handleDelete() {
-    dispatch({ type: "watched/delete", payload: hoverId });
+    deleteMovie(hoverId, dispatch);
   }
+
   return (
     <ul>
       {movies?.map((movie) => (

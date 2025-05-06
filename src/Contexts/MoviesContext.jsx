@@ -1,17 +1,24 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
-import { fetchMovies } from "../components/util";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
+import { fetchMovies, fetchWatchList } from "../components/util";
 
 const MoviesContext = createContext();
 
-function initWatched() {
-  const list = localStorage.getItem("watchedList");
-  if (list) return JSON.parse(list);
-  return [];
-}
+// NOTE: for localstorage use
+// function initWatched() {
+//   const list = localStorage.getItem("watchedList");
+//   if (list) return JSON.parse(list);
+//   return [];
+// }
 
 const initialState = {
   movies: [],
-  watched: initWatched(),
+  watched: [],
   error: "",
   isLoading: false,
   query: "",
@@ -33,6 +40,13 @@ function reducer(state, action) {
         isLoading: false,
         error: "",
       };
+    case "watched/set":
+      return {
+        ...state,
+        watched: action.payload,
+        isLoading: false,
+        error: "",
+      };
     case "selectedID/set":
       return {
         ...state,
@@ -51,18 +65,18 @@ function reducer(state, action) {
         isLoading: true,
         error: "",
       };
-    case "watched/add":
-      return {
-        ...state,
-        watched: [...state.watched, action.payload],
-      };
-    case "watched/delete":
-      return {
-        ...state,
-        watched: state.watched.filter(
-          (movie) => movie.imdbID !== action.payload,
-        ),
-      };
+    // case "watched/add":
+    //   return {
+    //     ...state,
+    //     watched: [...state.watched, action.payload],
+    //   };
+    // case "watched/delete":
+    //   return {
+    //     ...state,
+    //     watched: state.watched.filter(
+    //       (movie) => movie.imdbID !== action.payload,
+    //     ),
+    //   };
     case "query/set":
       return {
         ...state,
@@ -76,6 +90,12 @@ function MovieContextProvider({ children }) {
     useReducer(reducer, initialState);
 
   const searchLength = movies ? movies.length : 0;
+
+  const watchedList = useCallback(fetchWatchList, []);
+
+  useEffect(() => {
+    watchedList(dispatch);
+  }, [watchedList]);
 
   useEffect(() => {
     const controller = new AbortController();
