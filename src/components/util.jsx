@@ -26,7 +26,8 @@ export async function fetchMovies(query, dispatch, controller) {
   }
 }
 
-export async function fetchWatchListData() {
+export async function fetchWatchListData(dispatch) {
+  dispatch({ type: "loading/watched" });
   const { data, error } = await supabase
     .from("usePopcorn_react_movies")
     .select("*");
@@ -45,12 +46,11 @@ export async function fetchWatchListData() {
 }
 
 export async function fetchWatchList(dispatch) {
-  dispatch({ type: "loading" });
   try {
-    const data = await fetchWatchListData();
+    const data = await fetchWatchListData(dispatch);
     dispatch({ type: "watched/set", payload: data });
   } catch (error) {
-    dispatch({ type: "error", payload: error.message });
+    dispatch({ type: "error/watched", payload: error.message });
   }
 }
 
@@ -60,11 +60,11 @@ export async function deleteMovie(id, dispatch) {
       .from("usePopcorn_react_movies")
       .delete()
       .eq("id", id);
-    const data = await fetchWatchListData();
+    const data = await fetchWatchListData(dispatch);
     if (!data) throw new Error(error);
     dispatch({ type: "watched/set", payload: data });
   } catch (err) {
-    dispatch({ type: "error", payload: err.message });
+    dispatch({ type: "error/watched", payload: err.message });
   }
 }
 
@@ -73,10 +73,10 @@ export async function addMovies(dispatch, newMovie) {
     const { error } = await supabase
       .from("usePopcorn_react_movies")
       .insert([newMovie]);
-    const data = await fetchWatchListData();
+    const data = await fetchWatchListData(dispatch);
     if (!data) throw new Error(error);
     dispatch({ type: "watched/set", payload: data });
   } catch (err) {
-    dispatch({ type: "error", payload: err.message });
+    dispatch({ type: "error/watched", payload: err.message });
   }
 }

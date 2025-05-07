@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useMovieContext } from "../Contexts/MoviesContext";
 
 export default function Box({ children, className }) {
   const [isOpen, setIsOpen] = useState(true);

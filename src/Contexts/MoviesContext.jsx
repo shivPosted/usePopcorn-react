@@ -21,8 +21,10 @@ const initialState = {
   watched: [],
   error: "",
   isLoading: false,
+  isLoadingWatchList: false,
   query: "",
   selectedId: null,
+  errorWatched: "",
 };
 
 function reducer(state, action) {
@@ -32,6 +34,12 @@ function reducer(state, action) {
         ...state,
         error: action.payload,
         isLoading: false,
+      };
+    case "error/watched":
+      return {
+        ...state,
+        errorWatched: action.payload,
+        isLoadingWatchList: false,
       };
     case "movies/set":
       return {
@@ -44,7 +52,7 @@ function reducer(state, action) {
       return {
         ...state,
         watched: action.payload,
-        isLoading: false,
+        isLoadingWatchList: false,
         error: "",
       };
     case "selectedID/set":
@@ -64,6 +72,11 @@ function reducer(state, action) {
         ...state,
         isLoading: true,
         error: "",
+      };
+    case "loading/watched":
+      return {
+        ...state,
+        isLoadingWatchList: true,
       };
     // case "watched/add":
     //   return {
@@ -86,8 +99,18 @@ function reducer(state, action) {
 }
 
 function MovieContextProvider({ children }) {
-  const [{ movies, watched, isLoading, error, query, selectedId }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    {
+      movies,
+      watched,
+      isLoading,
+      error,
+      query,
+      selectedId,
+      isLoadingWatchList,
+    },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const searchLength = movies ? movies.length : 0;
 
@@ -117,20 +140,20 @@ function MovieContextProvider({ children }) {
     localStorage.setItem("watchedList", JSON.stringify(watched));
   }, [watched]);
 
-  function handleAddToWathedList(passedMovie) {
-    const isPresent = watched.findIndex(
-      (movie) => movie.imdbID === passedMovie.imdbID,
-    );
-    if (!(isPresent === -1)) return null;
-
-    // const newArr =
-    //   isPresent === -1 ? [...watched] : [...watched].splice(isPresent, 1);
-
-    // newArr.push(passedMovie);
-    dispatch({ type: "watched/add", payload: passedMovie });
-    // setMovies(cur => )
-    dispatch({ type: "selectedID/null" });
-  }
+  // function handleAddToWathedList(passedMovie) {
+  //   const isPresent = watched.findIndex(
+  //     (movie) => movie.imdbID === passedMovie.imdbID,
+  //   );
+  //   if (!(isPresent === -1)) return null;
+  //
+  //   // const newArr =
+  //   //   isPresent === -1 ? [...watched] : [...watched].splice(isPresent, 1);
+  //
+  //   // newArr.push(passedMovie);
+  //   dispatch({ type: "watched/add", payload: passedMovie });
+  //   // setMovies(cur => )
+  //   dispatch({ type: "selectedID/null" });
+  // }
 
   return (
     <MoviesContext.Provider
@@ -143,7 +166,7 @@ function MovieContextProvider({ children }) {
         searchLength,
         watched,
         query,
-        handleAddToWathedList,
+        isLoadingWatchList,
       }}
     >
       {children}

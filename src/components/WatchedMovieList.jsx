@@ -4,7 +4,7 @@ import { useMovieContext } from "../Contexts/MoviesContext";
 import { deleteMovie } from "./util";
 
 export default function WatchedMovieList() {
-  const { watched: movies, dispatch, loading } = useMovieContext();
+  const { watched: movies, dispatch } = useMovieContext();
 
   const [hoverId, setHoverId] = useState(null);
 

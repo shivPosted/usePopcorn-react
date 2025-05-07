@@ -1,10 +1,10 @@
 import { useMovieContext } from "../Contexts/MoviesContext";
 
-export default function DisplayError({ message }) {
-  const { error: contextError } = useMovieContext();
+export default function DisplayError() {
+  const { error: contextError, errorWatched } = useMovieContext();
   return (
     <p className="error">
-      🚨<span>{contextError ? contextError : message}</span>
+      🚨<span>{contextError ? contextError : errorWatched}</span>
     </p>
   );
 }

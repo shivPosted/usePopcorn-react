@@ -12,11 +12,10 @@ import SelectedMovie from "./components/SelectedMovie";
 import UserSummary from "./components/UserSummary";
 import WatchedMovieList from "./components/WatchedMovieList";
 import { useMovieContext } from "./Contexts/MoviesContext";
-import { useEffect } from "react";
-import supabase from "./supabse";
 
 function App() {
-  const { isLoading, error, selectedId } = useMovieContext();
+  const { isLoading, error, selectedId, isLoadingWatchList, errorWatched } =
+    useMovieContext();
   // const [movies, setMovies] = useState([]);
   //
   // const [watched, setWatched] = useState(() => {
@@ -61,7 +60,8 @@ function App() {
       </NavBar>
       <Main>
         <Box className="result-display-section">
-          {!error ? isLoading ? <Loader /> : <MovieList /> : <DisplayError />}
+          {error && <DisplayError />}
+          {isLoading ? <Loader /> : <MovieList />}
         </Box>
         <Box className="watch-list-section">
           {selectedId ? (
@@ -69,7 +69,8 @@ function App() {
           ) : (
             <>
               <UserSummary />
-              <WatchedMovieList />
+              {errorWatched && <DisplayError />}
+              {isLoadingWatchList ? <Loader /> : <WatchedMovieList />}
             </>
           )}
         </Box>
