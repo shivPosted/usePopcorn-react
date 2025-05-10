@@ -451,3 +451,13 @@ height: 3.2rem; */
   grid-area: b;
   background-color: #ff3859;
 }
+
+.start-message {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 3.2rem;
+}
+.start-message-emoji {
+  font-size: 2.4rem;
+}

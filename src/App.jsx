@@ -12,6 +12,7 @@ import SelectedMovie from "./components/SelectedMovie";
 import UserSummary from "./components/UserSummary";
 import WatchedMovieList from "./components/WatchedMovieList";
 import { useMovieContext } from "./Contexts/MoviesContext";
+import StartMessage from "./components/StartMessage";
 
 function App() {
   const { isLoading, error, selectedId, isLoadingWatchList, errorWatched } =
@@ -59,7 +60,7 @@ function App() {
         <NumResult />
       </NavBar>
       <Main>
-        <Box className="result-display-section">
+        <Box className="result-display-section" showStartMessage={true}>
           {error && <DisplayError />}
           {isLoading ? <Loader /> : <MovieList />}
         </Box>
