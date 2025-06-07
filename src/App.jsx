@@ -12,7 +12,6 @@ import SelectedMovie from "./components/SelectedMovie";
 import UserSummary from "./components/UserSummary";
 import WatchedMovieList from "./components/WatchedMovieList";
 import { useMovieContext } from "./Contexts/MoviesContext";
-import StartMessage from "./components/StartMessage";
 
 function App() {
   const { isLoading, error, selectedId, isLoadingWatchList, errorWatched } =

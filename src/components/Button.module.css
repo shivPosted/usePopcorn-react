@@ -1,0 +1,10 @@
+.button.not-global {
+  position: static;
+  border-radius: 6px;
+}
+.button.auth {
+  border-radius: 9px;
+  background-color: #5b38d2;
+  color: #f7f7f7;
+  font-size: 1.6rem;
+}

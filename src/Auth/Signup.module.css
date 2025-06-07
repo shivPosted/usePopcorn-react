@@ -1,0 +1,17 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3.2rem;
+}
+.form img {
+  width: 5.2rem;
+  height: 5.2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: white;
+}
+.img-selector-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

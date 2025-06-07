@@ -40,6 +40,9 @@ button {
   cursor: pointer;
   z-index: 200;
 }
+.auth-btn {
+  border-radius: 6px;
+}
 
 .flex {
   display: flex;
