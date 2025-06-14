@@ -3,17 +3,11 @@
   width: 100%;
   background: #211a3b;
   background: linear-gradient(0deg, #211a3b, #353064);
-}
-.heading {
-  font-size: 4.8rem;
-  color: white;
-  text-transform: capitalize;
-  text-align: center;
-  margin-bottom: 4.8rem;
+  position: relative;
+  overflow-y: auto;
 }
 .container {
   width: 30%;
-  height: 80%;
   position: absolute;
   top: 50%;
   left: 50%;

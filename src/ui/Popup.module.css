@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  padding: 1.2rem 2.4rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  border-radius: 6px;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.success {
+  background-color: #a7f3d0;
+  color: #059669;
+}
+.fail {
+  background-color: #fecaca;
+  color: #ef4444;
+}

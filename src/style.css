@@ -40,9 +40,6 @@ button {
   cursor: pointer;
   z-index: 200;
 }
-.auth-btn {
-  border-radius: 6px;
-}
 
 .flex {
   display: flex;
@@ -62,6 +59,7 @@ nav {
   background-color: #5b38d2;
   color: #fff;
   border-radius: 6px;
+  position: relative;
 }
 
 .logo {
@@ -280,16 +278,23 @@ li h4 {
   cursor: pointer;
 }
 
-.add-watchlist-btn {
-  position: static;
-  font-size: 1.6rem;
-  padding: 1.2rem 2.4rem;
+.add-watchlist-btn,
+.user-profile-btn {
   background-color: #6f46f1;
   color: #fff;
   width: auto;
   height: auto;
   border-radius: 100vw;
   cursor: pointer;
+}
+.add-watchlist-btn {
+  position: static;
+  font-size: 1.6rem;
+  padding: 1.2rem 2.4rem;
+}
+.user-profile-btn {
+  font-size: 1.2rem;
+  padding: 0.6rem 1.2rem;
 }
 
 .watch-list-row {

@@ -6,7 +6,16 @@ function Input({
   labelName,
   inputName,
   inputPlaceholder,
+  setValue,
+  value,
+  setAvatarPreview = () => {},
 }) {
+  function handlePreview(e) {
+    const file = e.target.files?.[0];
+    const url = URL.createObjectURL(file) || "";
+    setAvatarPreview(url);
+  }
+
   return (
     <div className={styles.container}>
       <label
@@ -15,13 +24,25 @@ function Input({
       >
         {labelName}
       </label>
-      <input
-        type={inputType}
-        name={inputName}
-        id={htmlFor}
-        className={`${styles.input} ${styles[inputType === "file" ? "file" : ""]} `}
-        placeholder={inputPlaceholder}
-      />
+      {inputType === "file" ? (
+        <input
+          type="file"
+          id={htmlFor}
+          name={inputName}
+          className={`${styles.input} ${styles.file}`}
+          onChange={handlePreview}
+        />
+      ) : (
+        <input
+          type={inputType}
+          name={inputName}
+          id={htmlFor}
+          className={styles.input}
+          placeholder={inputPlaceholder}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+      )}
     </div>
   );
 }

@@ -1,10 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+import styles from "./AuthNav.module.css";
 
 function AuthNav() {
+  const navigate = useNavigate();
   return (
-    <div className="nav">
-      <Button type="auth">sign up</Button>
-      <Button type="auth">login</Button>
+    <div className={styles.nav}>
+      <Button type="auth" handleClick={() => navigate("signup")}>
+        sign up
+      </Button>
+      <Button type="auth" handleClick={() => navigate("login")}>
+        login
+      </Button>
     </div>
   );
 }

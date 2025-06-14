@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 1.8rem;
+  cursor: pointer;
+  border-radius: 100vw;
+  border: 2px solid transparent;
+  padding: 1.2rem 2.4rem;
+  transition: all ease-in 300ms;
+}
+
+.container:hover {
+  border: 2px solid white;
+}
+
+.name {
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.container-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  position: absolute;
+  right: -3%;
+  transform: translateY(100%);
+  bottom: 0;
+  width: 30rem;
+}
+.container-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.2rem;
+}
+.fullName {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-top: 1.6rem;
+  margin-bottom: 0.6rem;
+  text-transform: capitalize;
+}
+.email {
+  font-size: 1.2rem;
+}
+.container-user-info > .img-container {
+  width: 5.4rem;
+  height: 5.4rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.container-user-info img {
+  width: 100%;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-top: 2.4rem;
+  justify-content: space-between;
+}
+.container-grid .button {
+  position: static !important;
+}

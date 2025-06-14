@@ -3,6 +3,13 @@
   flex-direction: column;
   row-gap: 3.2rem;
 }
+.heading {
+  font-size: 4.8rem;
+  color: white;
+  text-transform: capitalize;
+  text-align: center;
+  margin-bottom: 4.8rem;
+}
 .form img {
   width: 5.2rem;
   height: 5.2rem;

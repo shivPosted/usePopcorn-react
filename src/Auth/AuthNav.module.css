@@ -1,5 +1,9 @@
 .nav {
-  width: 100%;
   display: flex;
+  justify-content: space-between;
+  width: 15%;
   align-items: center;
+  position: absolute;
+  top: 5%;
+  right: 5%;
 }

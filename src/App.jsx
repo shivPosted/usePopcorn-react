@@ -12,10 +12,17 @@ import SelectedMovie from "./components/SelectedMovie";
 import UserSummary from "./components/UserSummary";
 import WatchedMovieList from "./components/WatchedMovieList";
 import { useMovieContext } from "./Contexts/MoviesContext";
+import { useAuth } from "./Auth/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import User from "./components/User";
 
 function App() {
   const { isLoading, error, selectedId, isLoadingWatchList, errorWatched } =
     useMovieContext();
+
+  const { error: authError, fetchUserInfo, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   // const [movies, setMovies] = useState([]);
   //
   // const [watched, setWatched] = useState(() => {
@@ -50,6 +57,14 @@ function App() {
   //   } catch (err) {
   //   }
   // }
+  //
+
+  useEffect(() => {
+    function init() {
+      fetchUserInfo().catch(() => navigate("/auth"));
+    }
+    init();
+  }, [fetchUserInfo, navigate]);
 
   return (
     <>
@@ -57,6 +72,7 @@ function App() {
         <Logo />
         <SearchBox />
         <NumResult />
+        <User />
       </NavBar>
       <Main>
         <Box className="result-display-section" showStartMessage={true}>

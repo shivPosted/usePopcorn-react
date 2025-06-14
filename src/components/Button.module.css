@@ -1,10 +1,28 @@
 .button.not-global {
   position: static;
-  border-radius: 6px;
+  cursor: pointer;
+  text-transform: capitalize;
+  transition:
+    box-shadow ease-in 300ms,
+    transform ease-in 300ms;
 }
 .button.auth {
-  border-radius: 9px;
-  background-color: #5b38d2;
-  color: #f7f7f7;
-  font-size: 1.6rem;
+  border-radius: 6px;
+  background-color: #f7f7f7;
+  color: #211a3b;
+  font-size: 2.4rem;
+  padding: 1rem 1.6rem;
+}
+.button:hover {
+  box-shadow:
+    0 4px 12px rgba(255, 255, 255, 0.08),
+    /* light glow */ 0 8px 24px rgba(0, 0, 0, 0.6); /* deep shadow */
+  transform: translateY(-3px);
+}
+.button.submit {
+  width: 100%;
+  font-size: 2.4rem;
+  font-weight: 700;
+  padding-block: 1.2rem;
+  border-radius: 6px;
 }
