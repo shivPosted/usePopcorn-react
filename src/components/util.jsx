@@ -1,11 +1,11 @@
 import supabase from "../supabse";
 
-export const API_key = import.meta.env.VITE_API_key;
+const backendEndpoint = import.meta.env.VITE_BACKEND_ENDPOINT;
 
 export const average = (arr) =>
   arr.reduce((accum, cur) => accum + cur) / arr.length;
 
-export async function fetchMovies(query, dispatch, controller) {
+export async function fetchMovies(query, dispatch, controller, API_key) {
   dispatch({ type: "loading" });
 
   try {
@@ -28,21 +28,13 @@ export async function fetchMovies(query, dispatch, controller) {
 
 export async function fetchWatchListData(dispatch) {
   dispatch({ type: "loading/watched" });
-  const { data, error } = await supabase
-    .from("usePopcorn_react_movies")
-    .select("*");
-  if (!data) throw new Error(error);
-  const newData = [...data].map((movie) => {
-    return {
-      imdbID: movie.id,
-      userRating: movie.user_rating,
-      title: movie.movie_name,
-      runtime: movie.movie_length,
-      poster: movie.movie_poster,
-      imdbRating: movie.imdb_rating,
-    };
+  const res = await fetch(`${backendEndpoint}/movies/getMovies`, {
+    method: "get",
+    credentials: "include",
   });
-  return newData;
+  const { data } = await res.json();
+  if (!res.ok) throw new Error(`${res.statusText}: ${data.error}`);
+  return data.map((movie) => movie);
 }
 
 export async function fetchWatchList(dispatch) {
@@ -68,13 +60,19 @@ export async function deleteMovie(id, dispatch) {
   }
 }
 
-export async function addMovies(dispatch, newMovie) {
+export async function addMovie(dispatch, newMovie) {
+  console.log(JSON.stringify(newMovie));
   try {
-    const { error } = await supabase
-      .from("usePopcorn_react_movies")
-      .insert([newMovie]);
-    const data = await fetchWatchListData(dispatch);
-    if (!data) throw new Error(error);
+    const res = await fetch(`${backendEndpoint}/movies/addMovie`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "post",
+      credentials: true,
+      body: JSON.stringify(newMovie),
+    });
+    const { data } = await res.json();
+    if (!res.ok) throw new Error(`${res.statusText}: ${data.error}`);
     dispatch({ type: "watched/set", payload: data });
   } catch (err) {
     dispatch({ type: "error/watched", payload: err.message });

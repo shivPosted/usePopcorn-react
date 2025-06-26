@@ -1,9 +1,9 @@
 import styles from "./Signup.module.css";
 import Input from "../components/Input";
-import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import { createUser } from "./authutil";
 import { useState } from "react";
+import { useAuth } from "./AuthContext";
 
 function Signup() {
   const [fullName, setFirstName] = useState("");
@@ -11,9 +11,22 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [avatarPreview, setAvatarPreview] = useState("");
+  const { signup } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    try {
+      await signup(formData);
+      navigate("/user");
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
   return (
-    <Form method="post" className={styles.form} encType="multipart/form-data">
+    <Form className={styles.form} onSubmit={handleSubmit} encType="multipart/form-data">
       <h1 className={styles.heading}>Sign Up</h1>
       <Input
         htmlFor="first-name"
@@ -58,23 +71,4 @@ function Signup() {
   );
 }
 
-async function action({ request }) {
-  const formData = await request.formData(); //formData is iterable
-  const newFormData = new FormData();
-
-  for (const [key, value] of formData.entries()) {
-    if (!(value instanceof File)) newFormData.append(key, value);
-  }
-
-  const avatar = formData.get("avatar");
-  const coverImage = formData.get("coverImage");
-
-  if (avatar) newFormData.append("avatar", avatar);
-  if (coverImage) newFormData.append("coverImage", coverImage);
-  await createUser(newFormData);
-  return redirect(`/user`);
-}
-
 export default Signup;
-
-export { action };

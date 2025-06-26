@@ -1,55 +1,41 @@
-import { useEffect } from "react";
-import { useReducer } from "react";
-import { useContext } from "react";
-import { createContext } from "react";
-import { getUser } from "./authutil";
-import { Navigate, redirect, useLocation, useNavigate } from "react-router-dom";
-import { useCallback } from "react";
+import {
+  useReducer,
+  useContext,
+  createContext,
+  useCallback,
+  useEffect,
+} from "react";
+import { getUser, loginUser, createUser, logOutUser } from "./authutil";
 
 const initialState = {
-  isAuthenticated: false,
-  user: {},
+  user: null,
   isLoading: false,
   error: null,
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case "SET/AUTHENTICATE":
-      return {
-        ...state,
-        isAuthenticated: true,
-      };
-    case "SET/USER":
-      return {
-        ...state,
-        isAuthenticated: true,
-        isLoading: false,
-        user: action.payload,
-        error: null,
-      };
-
-    case "SET/LOADING":
+    case "LOADING":
       return {
         ...state,
         isLoading: true,
+        error: null,
       };
-    case "SET/LOADING_DONE":
+    case "USER_LOADED":
       return {
         ...state,
         isLoading: false,
+        user: action.payload,
       };
-    case "SET/ERROR":
+    case "ERROR":
       return {
         ...state,
         isLoading: false,
-        user: {},
         error: action.payload,
       };
-    case "REMOVE/ERROR":
+    case "LOGOUT":
       return {
-        ...state,
-        error: null,
+        ...initialState,
       };
     default:
       return state;
@@ -59,36 +45,72 @@ function reducer(state, action) {
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-  const [{ user, isLoading, isAuthenticated, error }, dispatch] = useReducer(
+  const [{ user, isLoading, error }, dispatch] = useReducer(
     reducer,
     initialState,
   );
 
-  const fetchUserInfo = useCallback(async function fetchUserInfo() {
-    dispatch({ type: "SET/LOADING" });
-    dispatch({ type: "REMOVE/ERROR" });
+  const getUserOnRefreshIfAuthorized = useCallback(async () => {
+    dispatch({ type: "LOADING" });
     try {
       const user = await getUser();
-      dispatch({ type: "SET/USER", payload: user });
-      return user;
+      dispatch({ type: "USER_LOADED", payload: user });
     } catch (error) {
-      console.error(error.message);
-      dispatch({ type: "SET/ERROR", payload: error.message });
+      dispatch({ type: "ERROR", payload: error.message });
       throw error;
-    } finally {
-      dispatch({ type: "SET/LOADING_DONE" });
     }
   }, []);
+
+  const login = useCallback(async (formData) => {
+    dispatch({ type: "LOADING" });
+    try {
+      const data = await loginUser(formData);
+      const user = await getUser();
+      dispatch({ type: "USER_LOADED", payload: user });
+      return data;
+    } catch (error) {
+      dispatch({ type: "ERROR", payload: error.message });
+      throw error;
+    }
+  }, []);
+
+  const signup = useCallback(async (formData) => {
+    dispatch({ type: "LOADING" });
+    try {
+      const data = await createUser(formData);
+      const user = await getUser();
+      dispatch({ type: "USER_LOADED", payload: user });
+      return data;
+    } catch (error) {
+      dispatch({ type: "ERROR", payload: error.message });
+      throw error;
+    }
+  }, []);
+
+  const logout = useCallback(async () => {
+    dispatch({ type: "LOADING" });
+    try {
+      await logOutUser(dispatch);
+      dispatch({ type: "LOGOUT" });
+    } catch (error) {
+      dispatch({ type: "ERROR", payload: error.message });
+      throw error;
+    }
+  }, []);
+
+  const isAuthenticated = user !== null;
 
   return (
     <AuthContext.Provider
       value={{
-        dispatch,
-        fetchUserInfo,
         user,
-        error,
         isLoading,
+        error,
         isAuthenticated,
+        login,
+        signup,
+        logout,
+        getUserOnRefreshIfAuthorized,
       }}
     >
       {children}
@@ -98,8 +120,9 @@ function AuthProvider({ children }) {
 
 function useAuth() {
   const context = useContext(AuthContext);
-
-  if (!context) throw new Error("Can not use context out of its scope");
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
   return context;
 }
 

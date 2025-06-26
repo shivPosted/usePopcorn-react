@@ -17,15 +17,18 @@ function Popup({ type = "success", message = "popup" }) {
   return (
     <AnimatePresence>
       {showPopup && (
-        <motion.div
-          className={`${styles.container} ${styles[type]}`}
-          initial={{ opacity: 0, y: 20, x: "-50%" }}
-          animate={{ opacity: 1, y: 0, x: "-50%" }}
-          exit={{ opacity: 0, y: 20, x: "-50%" }}
-          transition={{ duration: 0.3 }}
-        >
-          {message}
-        </motion.div>
+        <>
+          <div className={styles["loading-backdrop"]}></div>
+          <motion.div
+            className={`${styles.container} ${styles[type]}`}
+            initial={{ opacity: 0, y: 20, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 20, x: "-50%" }}
+            transition={{ duration: 0.3 }}
+          >
+            {message}
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );

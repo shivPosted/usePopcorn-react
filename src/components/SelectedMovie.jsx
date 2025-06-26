@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { addMovies, API_key } from "./util";
+import { addMovie } from "./util";
 import Loader from "./Loader";
 import DisplayError from "./DisplayError";
 import StarComponent from "./StarComponent";
 import { useMovieContext } from "../Contexts/MoviesContext";
 
+const API_key = import.meta.env.API_key;
+
 export default function SelectedMovie() {
   // let showAddBtn = false;
   const { dispatch, selectedId, watched: watchlist } = useMovieContext();
 
-  const iswatched = watchlist.find((movie) => movie.imdbID === selectedId);
+  const iswatched = watchlist.find((movie) => movie.imdbId === selectedId);
 
   // function defaultRatingHandle() {
   //   // if (!movieInList) return;
@@ -41,17 +43,18 @@ export default function SelectedMovie() {
     dispatch({ type: "selectedID/null" });
   }
 
-  function handleAddOnClick() {
+  async function handleAddOnClick() {
+    console.log("adding movie");
     const newMovie = {
-      movie_length: isFinite(parseInt(runtime)) ? parseInt(runtime) : 0,
-      movie_name: title,
+      runtime: isFinite(parseInt(runtime)) ? parseInt(runtime) : 0,
+      title,
       // imdbRating: parseInt(imdbRating),
-      imdb_rating: imdbRating,
-      user_rating: userRating,
-      movie_poster: poster,
-      id: selectedId,
+      imdbRating: parseFloat(imdbRating),
+      userRating,
+      poster,
+      imdbId: selectedId,
     };
-    addMovies(dispatch, newMovie);
+    addMovie(dispatch, newMovie);
   }
 
   useEffect(() => {

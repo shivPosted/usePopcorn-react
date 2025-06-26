@@ -66,7 +66,7 @@ async function loginUser(formData) {
     throw error;
   }
 }
-async function logOutUser() {
+async function logOutUser(dispatch) {
   try {
     const res = await fetch(`${API_BASE}/users/logout`, {
       method: "post",
@@ -74,6 +74,7 @@ async function logOutUser() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(`${res.status}: ${data.error}`);
+    dispatch({ type: "RESET/LOGOUT" });
     return data.message;
   } catch (error) {
     console.error(error.message);

@@ -1,37 +1,29 @@
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { Form, useActionData, useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import { loginUser } from "./authutil";
 import { useState } from "react";
-import Popup from "../ui/Popup";
-import { useEffect } from "react";
 import { useAuth } from "./AuthContext";
 
 function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const { fetchUserInfo } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const data = useActionData();
-  const success = data?.message;
-  let error = data?.error;
-  console.log(error);
 
-  useEffect(() => {
-    if (!success) return;
-    fetchUserInfo().then(() => navigate("/user"));
-  }, [navigate, fetchUserInfo, success]);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      await login({ userName, password });
+      navigate("/user");
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
   return (
-    <Form method="POST" className={styles.form}>
+    <Form className={styles.form} onSubmit={handleSubmit}>
       <h1 className={styles.heading}>Login</h1>
-      {data && (
-        <Popup
-          type={error ? "fail" : "success"}
-          message={error ? error : data?.message}
-        />
-      )}
       <Input
         htmlFor="username/email"
         labelName="Username"
@@ -53,11 +45,4 @@ function Login() {
   );
 }
 
-async function action({ request }) {
-  const res = await request.formData();
-  const formData = Object.fromEntries(res);
-  const data = await loginUser(formData);
-  return data;
-}
 export default Login;
-export { action };

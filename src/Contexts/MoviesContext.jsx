@@ -7,6 +7,8 @@ import {
 } from "react";
 import { fetchMovies, fetchWatchList } from "../components/util";
 
+import { useAuth } from "../Auth/AuthContext";
+
 const MoviesContext = createContext();
 
 // NOTE: for localstorage use
@@ -78,27 +80,35 @@ function reducer(state, action) {
         ...state,
         isLoadingWatchList: true,
       };
-    // case "watched/add":
-    //   return {
-    //     ...state,
-    //     watched: [...state.watched, action.payload],
-    //   };
-    // case "watched/delete":
-    //   return {
-    //     ...state,
-    //     watched: state.watched.filter(
-    //       (movie) => movie.imdbID !== action.payload,
-    //     ),
-    //   };
+    case "watched/add":
+      return {
+        ...state,
+        watched: [...state.watched, action.payload],
+      };
+    case "watched/delete":
+      return {
+        ...state,
+        watched: state.watched.filter(
+          (movie) => movie.imdbID !== action.payload,
+        ),
+      };
     case "query/set":
       return {
         ...state,
         query: action.payload,
       };
+    case "reset":
+      return {
+        ...initialState,
+      };
   }
 }
 
+
+
 function MovieContextProvider({ children }) {
+  const API_key = import.meta.env.VITE_API_key;
+  const { isAuthenticated } = useAuth();
   const [
     {
       movies,
@@ -114,11 +124,11 @@ function MovieContextProvider({ children }) {
 
   const searchLength = movies ? movies.length : 0;
 
-  const watchedList = useCallback(fetchWatchList, []);
+  const watchedList = useCallback(fetchWatchList, [isAuthenticated]);
 
   useEffect(() => {
-    watchedList(dispatch);
-  }, [watchedList]);
+    if (isAuthenticated) watchedList(dispatch);
+  }, [watchedList, isAuthenticated]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -129,31 +139,34 @@ function MovieContextProvider({ children }) {
     }
 
     dispatch({ type: "selectedID/null" });
-    fetchMovies(query, dispatch, controller);
+    fetchMovies(query, dispatch, controller, API_key);
 
     return () => {
       controller.abort();
     };
-  }, [query]);
+  }, [query, API_key]);
 
   useEffect(() => {
-    localStorage.setItem("watchedList", JSON.stringify(watched));
+    try {
+      localStorage.setItem("watchedList", JSON.stringify(watched));
+    } catch (error) {
+      dispatch({ type: "error/watched", payload: error.message });
+    }
   }, [watched]);
 
-  // function handleAddToWathedList(passedMovie) {
-  //   const isPresent = watched.findIndex(
-  //     (movie) => movie.imdbID === passedMovie.imdbID,
-  //   );
-  //   if (!(isPresent === -1)) return null;
-  //
-  //   // const newArr =
-  //   //   isPresent === -1 ? [...watched] : [...watched].splice(isPresent, 1);
-  //
-  //   // newArr.push(passedMovie);
-  //   dispatch({ type: "watched/add", payload: passedMovie });
-  //   // setMovies(cur => )
-  //   dispatch({ type: "selectedID/null" });
-  // }
+  function handleAddToWathedList(passedMovie) {
+    const isPresent = watched.findIndex(
+      (movie) => movie.imdbID === passedMovie.imdbID,
+    );
+    if (!(isPresent === -1)) return null;
+
+    dispatch({ type: "watched/add", payload: passedMovie });
+    dispatch({ type: "selectedID/null" });
+  }
+
+  function handleDeleteWatched(id) {
+    dispatch({ type: "watched/delete", payload: id });
+  }
 
   return (
     <MoviesContext.Provider
@@ -167,6 +180,8 @@ function MovieContextProvider({ children }) {
         watched,
         query,
         isLoadingWatchList,
+        handleAddToWathedList,
+        handleDeleteWatched,
       }}
     >
       {children}

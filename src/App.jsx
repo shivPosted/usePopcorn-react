@@ -13,16 +13,17 @@ import UserSummary from "./components/UserSummary";
 import WatchedMovieList from "./components/WatchedMovieList";
 import { useMovieContext } from "./Contexts/MoviesContext";
 import { useAuth } from "./Auth/AuthContext";
+import User from "./components/User";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import User from "./components/User";
+import Popup from "./ui/Popup";
 
 function App() {
   const { isLoading, error, selectedId, isLoadingWatchList, errorWatched } =
     useMovieContext();
-
-  const { error: authError, fetchUserInfo, isAuthenticated } = useAuth();
+  const { getUserOnRefreshIfAuthorized, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
+
   // const [movies, setMovies] = useState([]);
   //
   // const [watched, setWatched] = useState(() => {
@@ -60,14 +61,12 @@ function App() {
   //
 
   useEffect(() => {
-    function init() {
-      fetchUserInfo().catch(() => navigate("/auth"));
-    }
-    init();
-  }, [fetchUserInfo, navigate]);
+    getUserOnRefreshIfAuthorized().catch(() => navigate("/auth"));
+  }, [getUserOnRefreshIfAuthorized, navigate]);
 
   return (
     <>
+      {authLoading && <Popup type="loading" message="Loading..." />}
       <NavBar>
         <Logo />
         <SearchBox />
@@ -76,7 +75,7 @@ function App() {
       </NavBar>
       <Main>
         <Box className="result-display-section" showStartMessage={true}>
-          {error && <DisplayError />}
+          {error && <DisplayError message={error} />}
           {isLoading ? <Loader /> : <MovieList />}
         </Box>
         <Box className="watch-list-section">
@@ -85,7 +84,7 @@ function App() {
           ) : (
             <>
               <UserSummary />
-              {errorWatched && <DisplayError />}
+              {errorWatched && <DisplayError message={errorWatched} />}
               {isLoadingWatchList ? <Loader /> : <WatchedMovieList />}
             </>
           )}

@@ -12,12 +12,13 @@ export default function WatchedMovieList() {
     deleteMovie(hoverId, dispatch);
   }
 
+  console.log(movies);
   return (
     <ul>
       {movies?.map((movie) => (
         <li
-          key={movie.imdbID}
-          onMouseEnter={() => setHoverId(movie.imdbID)}
+          key={movie.imdbId}
+          onMouseEnter={() => setHoverId(movie.imdbId)}
           onMouseLeave={() => setHoverId(null)}
           className="watch-list-row"
         >
@@ -36,7 +37,7 @@ export default function WatchedMovieList() {
               ⌛ <span>{movie.runtime}</span>
             </div>
           </div>
-          {movie.imdbID === hoverId ? (
+          {movie.imdbId === hoverId ? (
             <DeleteButton handleClick={handleDelete} />
           ) : (
             ""

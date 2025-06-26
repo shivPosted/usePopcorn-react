@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import { MovieContextProvider } from "./Contexts/MoviesContext.jsx";
 import {
-  BrowserRouter,
   createBrowserRouter,
   Navigate,
   RouterProvider,
@@ -11,8 +10,6 @@ import {
 import AuthPage from "./Auth/AuthPage.jsx";
 import Login from "./Auth/Login.jsx";
 import Signup from "./Auth/Signup.jsx";
-import { action as signupAction } from "./Auth/Signup.jsx";
-import { action as loginAction } from "./Auth/Login.jsx";
 import { AuthProvider } from "./Auth/AuthContext.jsx";
 import ErrorPopup from "./ui/ErrorPopup.jsx";
 
@@ -39,12 +36,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
-        action: loginAction,
       },
       {
         path: "signup",
         element: <Signup />,
-        action: signupAction,
       },
     ],
   },
