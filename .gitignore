@@ -27,3 +27,4 @@ dist-ssr
 
 # shifted from supabase to my own backend
 ./src/supabse.js
+src/supabse.js

@@ -1,4 +1,4 @@
-import supabase from "../supabse";
+
 
 const backendEndpoint = import.meta.env.VITE_BACKEND_ENDPOINT;
 
