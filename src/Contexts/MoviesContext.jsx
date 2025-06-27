@@ -104,10 +104,8 @@ function reducer(state, action) {
   }
 }
 
-
-
 function MovieContextProvider({ children }) {
-  const API_key = import.meta.env.VITE_API_key;
+  const API_key = import.meta.env.VITE_OMDB_API_KEY;
   const { isAuthenticated } = useAuth();
   const [
     {

@@ -16,10 +16,15 @@ export default function Box({ children, className, showStartMessage = false }) {
       >
         {isOpen ? "-" : "+"}
       </button>
-      {isOpen && children}
-      {movies.length === 0 && showStartMessage && !isLoading ? (
-        <StartMessage />
-      ) : null}
+      {isOpen && (
+        <div className="box-content-scrollable">
+          {children}
+          {movies.length === 0 && showStartMessage && !isLoading ? (
+            <StartMessage />
+          ) : null}
+        </div>
+      )}
     </section>
   );
 }
+

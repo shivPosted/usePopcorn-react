@@ -12,6 +12,7 @@ import Login from "./Auth/Login.jsx";
 import Signup from "./Auth/Signup.jsx";
 import { AuthProvider } from "./Auth/AuthContext.jsx";
 import ErrorPopup from "./ui/ErrorPopup.jsx";
+import { ThemeProvider } from "./Contexts/ThemeContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -49,7 +50,9 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <MovieContextProvider>
-        <RouterProvider router={router} />
+        <ThemeProvider>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </MovieContextProvider>
     </AuthProvider>
   </StrictMode>,

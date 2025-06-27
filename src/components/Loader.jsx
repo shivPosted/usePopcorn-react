@@ -166,7 +166,7 @@ const LoadingDot = {
   display: "block",
   width: "1.6rem",
   height: "1.6rem",
-  backgroundColor: "#f7f7f7",
+  backgroundColor: "var(--color-primary)",
   borderRadius: "50%",
 };
 
@@ -195,7 +195,7 @@ const DotVariants = {
     y: "0%",
   },
   animate: {
-    y: "100%",
+    y: "-100%",
   },
 };
 

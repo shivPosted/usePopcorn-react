@@ -5,7 +5,7 @@ import DisplayError from "./DisplayError";
 import StarComponent from "./StarComponent";
 import { useMovieContext } from "../Contexts/MoviesContext";
 
-const API_key = import.meta.env.API_key;
+const API_key = import.meta.env.VITE_OMDB_API_KEY;
 
 export default function SelectedMovie() {
   // let showAddBtn = false;

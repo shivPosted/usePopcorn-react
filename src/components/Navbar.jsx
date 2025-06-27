@@ -1,3 +1,10 @@
+import ThemeToggle from "./ThemeToggle";
+
 export default function NavBar({ children }) {
-  return <nav className="flex">{children}</nav>;
+  return (
+    <nav className="flex">
+      {children}
+      <ThemeToggle />
+    </nav>
+  );
 }
