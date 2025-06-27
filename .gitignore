@@ -26,4 +26,4 @@ dist-ssr
 *.sw?
 
 # shifted from supabase to my own backend
-.src/supabase.js
+./src/supabase.js
