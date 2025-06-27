@@ -48,13 +48,14 @@ export async function fetchWatchList(dispatch) {
 
 export async function deleteMovie(id, dispatch) {
   try {
-    const { error } = await supabase
-      .from("usePopcorn_react_movies")
-      .delete()
-      .eq("id", id);
-    const data = await fetchWatchListData(dispatch);
-    if (!data) throw new Error(error);
-    dispatch({ type: "watched/set", payload: data });
+    const res = await fetch(`${backendEndpoint}/movies/delete?imdbId=${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    const { data } = await res.json();
+    if (!res.ok) throw new Error(`${res.statusText}: ${data.error}`);
+    const newWatchList = await fetchWatchListData(dispatch);
+    dispatch({ type: "watched/set", payload: newWatchList });
   } catch (err) {
     dispatch({ type: "error/watched", payload: err.message });
   }
@@ -62,18 +63,20 @@ export async function deleteMovie(id, dispatch) {
 
 export async function addMovie(dispatch, newMovie) {
   console.log(JSON.stringify(newMovie));
+  dispatch({ type: "loading/watched" });
   try {
     const res = await fetch(`${backendEndpoint}/movies/addMovie`, {
       headers: {
         "Content-Type": "application/json",
       },
       method: "post",
-      credentials: true,
+      credentials: "include",
       body: JSON.stringify(newMovie),
     });
     const { data } = await res.json();
     if (!res.ok) throw new Error(`${res.statusText}: ${data.error}`);
-    dispatch({ type: "watched/set", payload: data });
+    const newWatchList = await fetchWatchListData(dispatch);
+    dispatch({ type: "watched/set", payload: newWatchList });
   } catch (err) {
     dispatch({ type: "error/watched", payload: err.message });
   }

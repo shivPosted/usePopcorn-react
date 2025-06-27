@@ -161,27 +161,37 @@ main > section::-webkit-scrollbar-thumb {
   background-color: var(--color-primary);
 }
 
+.search-list-row {
+  cursor: pointer;
+}
+
+
+
+.img-container {
+  grid-row: 1 / 3;
+  width: 6rem; /* Fixed width for the image container */
+  height: 9rem; /* Fixed height for the image container (approx. 2:3 aspect ratio) */
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
 li {
   display: grid;
   row-gap: 1rem;
   column-gap: 2rem;
-  grid-template-columns: 2fr 8fr;
+  grid-template-columns: 6rem 1fr; /* Fixed width for image column, flexible for content */
   padding: 1.6rem 2.4rem;
   border-bottom: 2px solid #77777722;
-  transition: all 0.3s;
+  transition: background-color 0.3s ease; /* Subtle transition for background color */
 }
 
 .search-list-row:hover {
   background-color: var(--color-background-900);
   cursor: pointer;
-}
-
-.img-container {
-  grid-row: 1 / 3;
-}
-
-.img-container img {
-  width: 100%;
 }
 
 li h3 {

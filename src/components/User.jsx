@@ -17,7 +17,7 @@ function User() {
   async function handleLogOut() {
     logout()
       .then(() => navigate("/auth"))
-      .catch((err) => console.erro(err));
+      .catch((err) => console.error(err));
   }
 
   return (

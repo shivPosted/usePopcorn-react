@@ -4,12 +4,18 @@ import Loader from "./Loader";
 import DisplayError from "./DisplayError";
 import StarComponent from "./StarComponent";
 import { useMovieContext } from "../Contexts/MoviesContext";
+import { motion } from "framer-motion";
 
 const API_key = import.meta.env.VITE_OMDB_API_KEY;
 
 export default function SelectedMovie() {
   // let showAddBtn = false;
-  const { dispatch, selectedId, watched: watchlist } = useMovieContext();
+  const {
+    dispatch,
+    selectedId,
+    watched: watchlist,
+    isLoadingWatchList: isUpdatingWatchlist,
+  } = useMovieContext();
 
   const iswatched = watchlist.find((movie) => movie.imdbId === selectedId);
 
@@ -44,7 +50,6 @@ export default function SelectedMovie() {
   }
 
   async function handleAddOnClick() {
-    console.log("adding movie");
     const newMovie = {
       runtime: isFinite(parseInt(runtime)) ? parseInt(runtime) : 0,
       title,
@@ -54,7 +59,7 @@ export default function SelectedMovie() {
       poster,
       imdbId: selectedId,
     };
-    addMovie(dispatch, newMovie);
+    await addMovie(dispatch, newMovie);
   }
 
   useEffect(() => {
@@ -113,7 +118,13 @@ export default function SelectedMovie() {
     <DisplayError message={error} />
   ) : (
     <>
-      <div className="selected-movie">
+      <motion.div
+        initial={{ opacity: 0, x: "100%" }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: "-100%" }}
+        transition={{ duration: 0.3 }}
+        className="selected-movie"
+      >
         <section className="movie-overview">
           <img
             className="movie-overview-image"
@@ -131,7 +142,14 @@ export default function SelectedMovie() {
         </section>
         <section>
           <div className="rate-movie">
-            {!iswatched ? (
+            {iswatched ? (
+              <p>
+                You gave this movie <strong>{iswatched.userRating}</strong>⭐
+                rating
+              </p>
+            ) : isUpdatingWatchlist ? (
+              <Loader />
+            ) : (
               <>
                 <StarComponent
                   maxLength={10}
@@ -150,11 +168,6 @@ export default function SelectedMovie() {
                   ""
                 )}
               </>
-            ) : (
-              <p>
-                You gave this movie <strong>{iswatched.userRating}</strong>⭐
-                rating
-              </p>
             )}
           </div>
           <p>{plot}</p>
@@ -164,7 +177,7 @@ export default function SelectedMovie() {
         <button className="back-btn" onClick={handleOnBackClick}>
           &larr;
         </button>
-      </div>
+      </motion.div>
     </>
   );
 }

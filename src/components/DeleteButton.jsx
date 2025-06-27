@@ -1,6 +1,12 @@
+import { motion } from "framer-motion";
+
 export default function DeleteButton({ handleClick }) {
   return (
-    <button className="delete-movie-btn" onClick={handleClick}>
+    <motion.button
+      whileHover={{ scale: 1.1 }}
+      className="delete-movie-btn"
+      onClick={handleClick}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="ionicon"
@@ -30,6 +36,6 @@ export default function DeleteButton({ handleClick }) {
           strokeWidth="32"
         />
       </svg>
-    </button>
+    </motion.button>
   );
 }

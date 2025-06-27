@@ -8,8 +8,8 @@ export default function WatchedMovieList() {
 
   const [hoverId, setHoverId] = useState(null);
 
-  function handleDelete() {
-    deleteMovie(hoverId, dispatch);
+  async function handleDelete() {
+    await deleteMovie(hoverId, dispatch);
   }
 
   console.log(movies);
@@ -34,7 +34,7 @@ export default function WatchedMovieList() {
               🌟 <span>{movie.userRating}</span>
             </div>
             <div className="movie-length">
-              ⌛ <span>{movie.runtime}</span>
+              ⌛ <span>{movie.runtime} min</span>
             </div>
           </div>
           {movie.imdbId === hoverId ? (

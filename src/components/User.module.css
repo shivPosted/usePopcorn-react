@@ -40,8 +40,6 @@
   padding: 1.6rem;
   z-index: 100; /* Ensure it appears above other content */
 }
-.container-grid > img {
-}
 .container-user-info {
   display: flex;
   flex-direction: column;

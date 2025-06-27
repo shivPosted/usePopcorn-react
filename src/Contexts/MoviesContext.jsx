@@ -144,27 +144,23 @@ function MovieContextProvider({ children }) {
     };
   }, [query, API_key]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem("watchedList", JSON.stringify(watched));
-    } catch (error) {
-      dispatch({ type: "error/watched", payload: error.message });
-    }
-  }, [watched]);
+  // useEffect(() => {
+  //   try {
+  //     localStorage.setItem("watchedList", JSON.stringify(watched));
+  //   } catch (error) {
+  //     dispatch({ type: "error/watched", payload: error.message });
+  //   }
+  // }, [watched]);
 
-  function handleAddToWathedList(passedMovie) {
-    const isPresent = watched.findIndex(
-      (movie) => movie.imdbID === passedMovie.imdbID,
-    );
-    if (!(isPresent === -1)) return null;
-
-    dispatch({ type: "watched/add", payload: passedMovie });
-    dispatch({ type: "selectedID/null" });
-  }
-
-  function handleDeleteWatched(id) {
-    dispatch({ type: "watched/delete", payload: id });
-  }
+  // function handleAddToWathedList(passedMovie) {
+  //   const isPresent = watched.findIndex(
+  //     (movie) => movie.imdbID === passedMovie.imdbID,
+  //   );
+  //   if (!(isPresent === -1)) return null;
+  //
+  //   dispatch({ type: "watched/add", payload: passedMovie });
+  //   dispatch({ type: "selectedID/null" });
+  // }
 
   return (
     <MoviesContext.Provider
@@ -178,8 +174,6 @@ function MovieContextProvider({ children }) {
         watched,
         query,
         isLoadingWatchList,
-        handleAddToWathedList,
-        handleDeleteWatched,
       }}
     >
       {children}
