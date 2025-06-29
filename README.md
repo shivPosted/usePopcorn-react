@@ -36,16 +36,6 @@
   - Git (for version control)
   - npm (for package management)
 
-## Getting Started
-
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
-
-### Prerequisites
-
-- Node.js (LTS version recommended)
-- npm (comes with Node.js)
-- Git
-
 ## Usage
 
 1.  **Register/Login:** Upon first visit, you'll be directed to the authentication page. Create a new account or log in with existing credentials.
@@ -60,24 +50,20 @@ Here are some screenshots demonstrating the application's features and responsiv
 
 ### Desktop View
 
-![Desktop Home Screen Placeholder](path/to/your/desktop-home-screenshot.png)
-_A clear view of the main application interface on a desktop._
+![Dark Mode Home View](./public/screenshots/screenshot-dark-home.png)
+_A clear view of the main application (dark mode) interface on a desktop._
 
-![Desktop Movie Details Placeholder](path/to/your/desktop-movie-details-screenshot.png)
-_Detailed movie information and rating component on desktop._
+![Light Mode Home View](./public/screenshots/screenshot-light-home.png)
+_A clear view of the main application (light mode) interface on a desktop._
 
-### Tablet View
+![Movie Details View](./public/screenshots/screenshot-dark-details.png)
+_A clear view of the movie details page._
 
-![Tablet Home Screen Placeholder](path/to/your/tablet-home-screenshot.png)
-_The application adapting to a tablet screen size._
+![User Section View](./public/screenshots/screenshot-light-user-home.png)
+_A clear view of the user dashboard._
 
-### Mobile View
-
-![Mobile Home Screen Placeholder](path/to/your/mobile-home-screenshot.png)
-_The compact layout for mobile devices._
-
-![Mobile Auth Page Placeholder](path/to/your/mobile-auth-screenshot.png)
-_The responsive authentication page on mobile._
+![Login Page](./public/screenshots/screenshot-login.png)
+_The application at login page._
 
 ## Future Enhancements (Optional)
 
