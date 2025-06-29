@@ -20,5 +20,48 @@
   background: #211a3b;
   background: linear-gradient(0deg, #211a3b, #353064);
 }
-.container label {
+
+@media (max-width: 768px) {
+  .container {
+    width: 60%;
+    padding: 3.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 90%;
+    padding: 2.4rem;
+  }
+}
+
+.infoLabel {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(52, 58, 64, 0.8); /* More subtle background */
+  color: #fff;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.2rem;
+  text-align: center;
+  z-index: 100; /* Ensure it's on top */
+}
+
+@media (max-width: 768px) {
+  .infoLabel {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .infoLabel {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+  }
 }

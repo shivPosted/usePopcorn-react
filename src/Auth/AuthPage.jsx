@@ -10,6 +10,9 @@ function AuthPage() {
 
   return (
     <div className={styles.wrapper}>
+      <div className={styles.infoLabel}>
+        <span>ℹ️</span> Backend may take a moment to load (free tier).
+      </div>
       {error && <Popup type="fail" message={error || "Please log in again"} />}
       {isLoading && <Popup type="loading" message="Loading..." />}
       <AuthNav />

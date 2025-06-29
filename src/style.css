@@ -131,6 +131,220 @@ main {
   column-gap: 2rem;
 }
 
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    padding: 1.6rem;
+    max-width: 95%;
+  }
+
+  nav input {
+    width: 100%;
+    margin-top: 1.6rem;
+  }
+
+  .logo h1 {
+    font-size: 2rem;
+  }
+
+  .result-summary {
+    font-size: 2rem;
+  }
+
+  main {
+    grid-template-columns: 1fr;
+    max-width: 95%;
+    margin: 2rem auto;
+  }
+
+  .selected-movie {
+    gap: 1.6rem;
+  }
+
+  .movie-overview {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .movie-overview-image {
+    width: 15rem;
+  }
+
+  .movie-overview-details {
+    gap: 1.6rem;
+  }
+
+  .selected-movie > section:nth-child(2) {
+    max-width: 95%;
+  }
+
+  .back-btn {
+    left: 5%;
+    top: 2%;
+  }
+
+  .collapse-show-btn {
+    right: 1.2rem;
+    top: 0.8rem;
+  }
+
+  .user-movies-overview {
+    padding: 1.2rem 1.6rem;
+  }
+
+  .user-movies-overview h3 {
+    font-size: 2rem;
+  }
+
+  .user-movies-overview .stats,
+  .user-reviewed-list-stats {
+    font-size: 1.4rem;
+  }
+
+  li {
+    padding: 1.2rem 1.6rem;
+  }
+
+  li h3 {
+    font-size: 2rem;
+  }
+
+  li h4 {
+    font-size: 1.4rem;
+  }
+
+  .img-container {
+    width: 5rem;
+    height: 7.5rem;
+  }
+
+  .rate-movie {
+    padding: 1.6rem;
+  }
+
+  .add-watchlist-btn {
+    font-size: 1.4rem;
+    padding: 1rem 2rem;
+  }
+
+  .user-profile-btn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .delete-movie-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 55%;
+  }
+
+  nav {
+    padding: 1rem;
+  }
+
+  .logo h1 {
+    font-size: 1.8rem;
+  }
+
+  .result-summary {
+    font-size: 1.8rem;
+  }
+
+  main {
+    margin: 1.5rem auto;
+  }
+
+  .selected-movie {
+    gap: 1.6rem;
+  }
+
+  .movie-overview {
+    gap: 1rem;
+  }
+
+  .movie-overview-image {
+    width: 12rem;
+  }
+
+  .movie-overview-details h2 {
+    font-size: 2rem;
+  }
+
+  .selected-movie > section:nth-child(2) {
+    max-width: 98%;
+    gap: 1.6rem;
+  }
+
+  .back-btn {
+    left: 3%;
+    top: 1.5%;
+    font-size: 2rem;
+  }
+
+  .collapse-show-btn {
+    right: 0.8rem;
+    top: 0.6rem;
+    font-size: 2.8rem;
+  }
+
+  .user-movies-overview {
+    padding: 1rem 1.2rem;
+  }
+
+  .user-movies-overview h3 {
+    font-size: 1.8rem;
+  }
+
+  .user-movies-overview .stats,
+  .user-reviewed-list-stats {
+    font-size: 1.2rem;
+  }
+
+  li {
+    padding: 1rem 1.2rem;
+  }
+
+  li h3 {
+    font-size: 1.8rem;
+  }
+
+  li h4 {
+    font-size: 1.2rem;
+  }
+
+  .img-container {
+    width: 4rem;
+    height: 6rem;
+  }
+
+  .rate-movie {
+    padding: 0.8rem;
+  }
+
+  .add-watchlist-btn {
+    font-size: 1.2rem;
+    padding: 0.8rem 1.6rem;
+  }
+
+  .user-profile-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .delete-movie-btn {
+    width: 3rem;
+    height: 3rem;
+    padding: 0.4rem;
+  }
+}
+
 main > section {
   background-color: var(--color-background-500);
   border-radius: 8px;
