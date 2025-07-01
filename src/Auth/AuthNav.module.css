@@ -1,18 +1,18 @@
 .nav {
   display: flex;
-  justify-content: space-between;
-  width: 15%;
   align-items: center;
-  position: absolute;
-  top: 5%;
-  right: 5%;
   font-size: 1.2rem;
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 4.2rem;
 }
 
 @media (max-width: 458px) {
   .nav {
     font-size: 1.2rem;
-    top: 8%;
+    top: 10%;
     left: 50%;
     transform: translateX(-50%);
   }
@@ -20,7 +20,7 @@
 @media (max-width: 768px) {
   .nav {
     font-size: 1.2rem;
-    top: 8%;
+    top: 10%;
     left: 50%;
     transform: translateX(-50%);
   }
